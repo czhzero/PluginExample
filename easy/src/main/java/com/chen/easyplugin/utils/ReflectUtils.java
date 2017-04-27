@@ -9,6 +9,7 @@ import java.lang.reflect.Method;
  */
 public class ReflectUtils {
 
+
     public static <T> T newInstance(String className, Object... args) {
         try {
             Class<?> cls = Class.forName(className);
@@ -27,6 +28,7 @@ public class ReflectUtils {
         return null;
     }
 
+
     public static <T> T newInstance(Class<?> cls, Class<?>[] argClasses, Object... args) {
         try {
             Constructor<?> constructor = null;
@@ -43,6 +45,7 @@ public class ReflectUtils {
         }
         return null;
     }
+
 
     public static boolean writeField(Object obj, String filedName, Object value) {
         try {
@@ -66,6 +69,7 @@ public class ReflectUtils {
         }
         return false;
     }
+
 
     public static <T> T readField(Object obj, String filedName) {
         try {
@@ -105,6 +109,7 @@ public class ReflectUtils {
 
     }
 
+
     private static Class<?>[] getArgClasses(Object... args) {
         int count = args.length;
         Class<?>[] argClasses = new Class<?>[count];
@@ -113,6 +118,7 @@ public class ReflectUtils {
         }
         return argClasses;
     }
+
 
     public static <T> T invoke(Class<?> cls, Object obj, String methodName) {
         Method method = null;

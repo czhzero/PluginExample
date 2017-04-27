@@ -1,7 +1,59 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.chen.easyplugin">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.chen.easyplugin">
 
-    <application android:allowBackup="true" android:label="@string/app_name"
+    <application
+        android:allowBackup="true"
+        android:label="@string/app_name"
         android:supportsRtl="true">
+
+
+        <activity
+            android:name="com.chen.easyplugin.stub.ActivityStub"
+            android:label="ActivityStub"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.chen.easyplugin.stub.ActivityStub$SingleTaskStub1"
+            android:label="SingleTaskStub1"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.chen.easyplugin.stub.ActivityStub$SingleTaskStub2"
+            android:label="SingleTaskStub2"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.chen.easyplugin.stub.ActivityStub$SingleTaskStub3"
+            android:label="SingleTaskStub3"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.chen.easyplugin.stub.ActivityStub$SingleTaskStub4"
+            android:label="SingleTaskStub4"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.chen.easyplugin.stub.ActivityStub$SingleTaskStub5"
+            android:label="SingleTaskStub5"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+
+        <service
+            android:name="com.chen.easyplugin.stub.BundleServiceContainer$Proxy1"
+            android:enabled="true" />
+        <service
+            android:name="com.chen.easyplugin.stub.BundleServiceContainer$Proxy2"
+            android:enabled="true" />
+        <service
+            android:name="com.chen.easyplugin.stub.BundleServiceContainer$Proxy3"
+            android:enabled="true" />
+        <service
+            android:name="com.chen.easyplugin.stub.BundleServiceContainer$Proxy4"
+            android:enabled="true" />
+        <service
+            android:name="com.chen.easyplugin.stub.BundleServiceContainer$Proxy5"
+            android:enabled="true" />
+
 
     </application>
 
