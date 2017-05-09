@@ -34,7 +34,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClassName("com.gezbox.winder.parttime", "com.gezbox.winder.parttime.activity.login.LoginDispatchActivity");
+                intent.setClassName("top.zibin.luban.example", "top.zibin.luban.example.MainActivity");
                 startActivity(intent);
             }
         });
