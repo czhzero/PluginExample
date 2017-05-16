@@ -7,36 +7,142 @@
         android:supportsRtl="true">
 
 
+
         <activity
-            android:name="com.chen.easyplugin.stub.ActivityStub"
-            android:label="ActivityStub"
+            android:name="com.chen.easyplugin.stub.ActivityStub$P00$Standard00"
+            android:allowTaskReparenting="true"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:hardwareAccelerated="true"
+            android:launchMode="standard"
+            android:noHistory="true"
+            android:screenOrientation="portrait" />
+
+
+
+        <activity
+            android:name="com.chen.easyplugin.stub.ActivityStub$P00$SingleTop00"
+            android:allowTaskReparenting="true"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:hardwareAccelerated="true"
+            android:launchMode="singleTop"
+            android:noHistory="true"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name="com.chen.easyplugin.stub.ActivityStub$SingleTaskStub1"
-            android:label="SingleTaskStub1"
-            android:launchMode="singleTask"
+            android:name="com.chen.easyplugin.stub.ActivityStub$P00$SingleTop01"
+            android:allowTaskReparenting="true"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:hardwareAccelerated="true"
+            android:launchMode="singleTop"
+            android:noHistory="true"
             android:screenOrientation="portrait" />
+
         <activity
-            android:name="com.chen.easyplugin.stub.ActivityStub$SingleTaskStub2"
-            android:label="SingleTaskStub2"
-            android:launchMode="singleTask"
+            android:name="com.chen.easyplugin.stub.ActivityStub$P00$SingleTop02"
+            android:allowTaskReparenting="true"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:hardwareAccelerated="true"
+            android:launchMode="singleTop"
+            android:noHistory="true"
             android:screenOrientation="portrait" />
+
         <activity
-            android:name="com.chen.easyplugin.stub.ActivityStub$SingleTaskStub3"
-            android:label="SingleTaskStub3"
-            android:launchMode="singleTask"
+            android:name="com.chen.easyplugin.stub.ActivityStub$P00$SingleTop03"
+            android:allowTaskReparenting="true"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:hardwareAccelerated="true"
+            android:launchMode="singleTop"
+            android:noHistory="true"
             android:screenOrientation="portrait" />
+
+
         <activity
-            android:name="com.chen.easyplugin.stub.ActivityStub$SingleTaskStub4"
-            android:label="SingleTaskStub4"
+            android:name="com.chen.easyplugin.stub.ActivityStub$P00$SingleTask00"
+            android:allowTaskReparenting="true"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:hardwareAccelerated="true"
             android:launchMode="singleTask"
+            android:noHistory="true"
             android:screenOrientation="portrait" />
+
         <activity
-            android:name="com.chen.easyplugin.stub.ActivityStub$SingleTaskStub5"
-            android:label="SingleTaskStub5"
+            android:name="com.chen.easyplugin.stub.ActivityStub$P00$SingleTask01"
+            android:allowTaskReparenting="true"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:hardwareAccelerated="true"
             android:launchMode="singleTask"
+            android:noHistory="true"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.chen.easyplugin.stub.ActivityStub$P00$SingleTask02"
+            android:allowTaskReparenting="true"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:hardwareAccelerated="true"
+            android:launchMode="singleTask"
+            android:noHistory="true"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.chen.easyplugin.stub.ActivityStub$P00$SingleTask03"
+            android:allowTaskReparenting="true"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:hardwareAccelerated="true"
+            android:launchMode="singleTask"
+            android:noHistory="true"
+            android:screenOrientation="portrait" />
+
+
+        <activity
+            android:name="com.chen.easyplugin.stub.ActivityStub$P00$SingleInstance00"
+            android:allowTaskReparenting="true"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:hardwareAccelerated="true"
+            android:launchMode="singleInstance"
+            android:noHistory="true"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.chen.easyplugin.stub.ActivityStub$P00$SingleInstance01"
+            android:allowTaskReparenting="true"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:hardwareAccelerated="true"
+            android:launchMode="singleInstance"
+            android:noHistory="true"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.chen.easyplugin.stub.ActivityStub$P00$SingleInstance02"
+            android:allowTaskReparenting="true"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:hardwareAccelerated="true"
+            android:launchMode="singleInstance"
+            android:noHistory="true"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.chen.easyplugin.stub.ActivityStub$P00$SingleInstance03"
+            android:allowTaskReparenting="true"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:hardwareAccelerated="true"
+            android:launchMode="singleInstance"
+            android:noHistory="true"
+            android:screenOrientation="portrait" />
+
+
 
         <service
             android:name="com.chen.easyplugin.stub.BundleServiceContainer$Proxy1"

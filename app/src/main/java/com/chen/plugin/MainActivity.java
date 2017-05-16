@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.chen.easyplugin.hook.FrameworkHookHelper;
+import com.chen.easyplugin.hook.proxy.FrameworkHookHelper;
 
 
 /**

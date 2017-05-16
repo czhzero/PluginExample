@@ -53,7 +53,7 @@ public class PluginManager {
      */
     private SparseArray<String> runningSingleTaskActivities = new SparseArray<String>();
     private final int MAX_ACTIVITY_NUM = 5;
-    private final String PLUGIN_SINGLETASK_ACTIVITY_CLASSNAME = "com.chen.easyplugin.stub.ActivityStub$SingleTaskStub";
+    private final String PLUGIN_SINGLETASK_ACTIVITY_CLASSNAME = "com.chen.easyplugin.stub.ActivityStub$P00$SingleTask";
 
     private ActivityManager am;
 

@@ -7,19 +7,66 @@ import android.app.Activity;
  */
 public class ActivityStub extends Activity {
 
-    public static class SingleTaskStub1 extends ActivityStub {
+
+    private static class SingleInstanceStub extends ActivityStub {
     }
 
-    public static class SingleTaskStub2 extends ActivityStub {
+    private static class SingleTaskStub extends ActivityStub {
     }
 
-    public static class SingleTaskStub3 extends ActivityStub {
+    private static class SingleTopStub extends ActivityStub {
     }
 
-    public static class SingleTaskStub4 extends ActivityStub {
+    private static class StandardStub extends ActivityStub {
     }
 
-    public static class SingleTaskStub5 extends ActivityStub {
+
+    //Process 1
+    public static class P00 {
+
+        public static class Standard00 extends StandardStub {
+        }
+
+
+        public static class SingleTop00 extends SingleTopStub {
+        }
+
+        public static class SingleTop01 extends SingleTopStub {
+        }
+
+        public static class SingleTop02 extends SingleTopStub {
+        }
+
+        public static class SingleTop03 extends SingleTopStub {
+        }
+
+
+        public static class SingleTask00 extends SingleTaskStub {
+        }
+
+        public static class SingleTask01 extends SingleTaskStub {
+        }
+
+        public static class SingleTask02 extends SingleTaskStub {
+        }
+
+        public static class SingleTask03 extends SingleTaskStub {
+        }
+
+
+        public static class SingleInstance00 extends SingleInstanceStub {
+        }
+
+        public static class SingleInstance01 extends SingleInstanceStub {
+        }
+
+        public static class SingleInstance02 extends SingleInstanceStub {
+        }
+
+        public static class SingleInstance03 extends SingleInstanceStub {
+        }
+
+
     }
 
 }

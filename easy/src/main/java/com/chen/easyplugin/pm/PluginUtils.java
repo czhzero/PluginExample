@@ -75,7 +75,7 @@ public class PluginUtils {
                 stubIntent = changeToSingleTaskPluginIntent(intent);
             } else {
                 // 启动Bundle的Activity
-                stubIntent = changeToPluginIntent(intent, ActivityStub.class.getName());
+                stubIntent = changeToPluginIntent(intent, ActivityStub.P00.Standard00.class.getName());
             }
         } else {
             // 调用平台外部的Activity

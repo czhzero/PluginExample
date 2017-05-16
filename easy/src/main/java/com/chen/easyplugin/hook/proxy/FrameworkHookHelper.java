@@ -1,11 +1,11 @@
-package com.chen.easyplugin.hook;
+package com.chen.easyplugin.hook.proxy;
 
 import android.os.Handler;
 
 
 import com.chen.easyplugin.hook.handle.ActivityThreadHandlerCallback;
-import com.chen.easyplugin.hook.proxy.IActivityManagerHandler;
-import com.chen.easyplugin.hook.proxy.IPackageManagerHandler;
+import com.chen.easyplugin.hook.handle.IActivityManagerHandler;
+import com.chen.easyplugin.hook.handle.IPackageManagerHandler;
 import com.chen.easyplugin.pm.PluginManager;
 import com.chen.easyplugin.utils.ReflectUtils;
 
