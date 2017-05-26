@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.chen.easyplugin.hook.proxy.FrameworkHookHelper;
+import com.chen.easyplugin.pm.PluginManager;
 
 
 /**
@@ -34,10 +35,12 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClassName("top.zibin.luban.example", "top.zibin.luban.example.MainActivity");
+                intent.setClassName("com.chen.testapp", "com.chen.testapp.MainActivity");
                 startActivity(intent);
             }
         });
+
+
 
 
     }
