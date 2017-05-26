@@ -1,11 +1,11 @@
-package com.chen.easyplugin.hook.proxy;
+package com.chen.plugin.hook.proxy;
 
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.chen.easyplugin.hook.BaseHook;
-import com.chen.easyplugin.hook.HookedMethodHandler;
-import com.chen.easyplugin.utils.MyProxy;
+import com.chen.plugin.hook.BaseHook;
+import com.chen.plugin.hook.HookedMethodHandler;
+import com.chen.plugin.utils.MyProxy;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;

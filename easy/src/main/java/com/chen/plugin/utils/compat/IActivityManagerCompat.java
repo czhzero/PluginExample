@@ -1,25 +1,20 @@
-package com.chen.easyplugin.utils.compat;
-
-
-import com.chen.easyplugin.reflect.MethodUtils;
-
-import java.lang.reflect.InvocationTargetException;
+package com.chen.plugin.utils.compat;
 
 /**
  * Created by chenzhaohua on 17/5/16.
  */
-public class SingletonCompat {
+public class IActivityManagerCompat {
 
     private static Class sClass;
 
     public static Class Class() throws ClassNotFoundException {
         if (sClass == null) {
-            sClass = Class.forName("android.util.Singleton");
+            sClass = Class.forName("android.app.IActivityManager");
         }
         return sClass;
     }
 
-    public static boolean isSingleton(Object obj) {
+    public static boolean isIActivityManager(Object obj) {
         if (obj == null) {
             return false;
         } else {
@@ -30,10 +25,5 @@ public class SingletonCompat {
                 return false;
             }
         }
-    }
-
-
-    public static Object get(Object targetSingleton) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-        return MethodUtils.invokeMethod(targetSingleton, "get");
     }
 }

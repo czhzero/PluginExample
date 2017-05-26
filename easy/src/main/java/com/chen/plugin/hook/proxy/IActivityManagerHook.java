@@ -1,16 +1,16 @@
-package com.chen.easyplugin.hook.proxy;
+package com.chen.plugin.hook.proxy;
 
 import android.content.Context;
 import android.util.AndroidRuntimeException;
 
-import com.chen.easyplugin.hook.BaseHookHandle;
+import com.chen.plugin.hook.BaseHookHandle;
 import com.chen.easyplugin.reflect.FieldUtils;
 import com.chen.easyplugin.reflect.Utils;
 import com.chen.easyplugin.utils.LogUtils;
-import com.chen.easyplugin.utils.MyProxy;
-import com.chen.easyplugin.utils.compat.ActivityManagerNativeCompat;
-import com.chen.easyplugin.utils.compat.IActivityManagerCompat;
-import com.chen.easyplugin.utils.compat.SingletonCompat;
+import com.chen.plugin.utils.MyProxy;
+import com.chen.plugin.utils.compat.ActivityManagerNativeCompat;
+import com.chen.plugin.utils.compat.IActivityManagerCompat;
+import com.chen.plugin.utils.compat.SingletonCompat;
 
 import java.util.List;
 

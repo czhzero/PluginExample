@@ -1,6 +1,8 @@
-package com.chen.easyplugin.hook;
+package com.chen.plugin.hook;
 
 import android.content.Context;
+
+import com.chen.plugin.hook.HookedMethodHandler;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;

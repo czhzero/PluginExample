@@ -20,7 +20,7 @@
 **
 **/
 
-package com.chen.easyplugin.utils.compat;
+package com.chen.plugin.utils.compat;
 
 import android.app.Instrumentation;
 import android.os.Handler;

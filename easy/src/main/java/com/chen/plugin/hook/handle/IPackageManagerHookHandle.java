@@ -17,7 +17,7 @@
 //import android.text.TextUtils;
 //
 //import com.chen.easyplugin.hook.BaseHookHandle;
-//import com.chen.easyplugin.hook.HookedMethodHandler;
+//import com.chen.plugin.hook.HookedMethodHandler;
 //
 //import java.lang.reflect.Method;
 //import java.util.ArrayList;

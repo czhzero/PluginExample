@@ -1,4 +1,4 @@
-package com.chen.easyplugin.utils;
+package com.chen.plugin.utils;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;

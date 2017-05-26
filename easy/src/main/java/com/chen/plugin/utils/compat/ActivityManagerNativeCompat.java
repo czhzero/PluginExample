@@ -1,4 +1,4 @@
-package com.chen.easyplugin.utils.compat;
+package com.chen.plugin.utils.compat;
 
 import com.chen.easyplugin.reflect.MethodUtils;
 
