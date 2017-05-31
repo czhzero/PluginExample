@@ -14,13 +14,13 @@ import android.os.IBinder;
 public class PluginManagerService extends Service {
 
     private static final String TAG = PluginManagerService.class.getSimpleName();
-    private PluginManagerServiceBinder mPluginManagerServiceBinder;
+    private PluginManagerServiceImpl mPluginManagerServiceBinder;
 
     @Override
     public void onCreate() {
         super.onCreate();
         keepAlive();
-        mPluginManagerServiceBinder = new PluginManagerServiceBinder(this);
+        mPluginManagerServiceBinder = new PluginManagerServiceImpl(this);
         mPluginManagerServiceBinder.onCreate();
 
     }

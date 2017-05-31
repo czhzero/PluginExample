@@ -24,11 +24,11 @@ import java.util.List;
  * Created by chenzhaohua on 17/5/18.
  */
 
-public class PluginManagerServiceBinder extends IPluginManagerService.Stub {
+public class PluginManagerServiceImpl extends IPluginManagerService.Stub {
 
     private Context mContext;
 
-    public PluginManagerServiceBinder(Context context) {
+    public PluginManagerServiceImpl(Context context) {
         mContext = context;
     }
 
