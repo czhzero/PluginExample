@@ -29,6 +29,7 @@ import android.os.Build.VERSION_CODES;
 
 import com.chen.easyplugin.utils.LogUtils;
 import com.chen.plugin.hook.proxy.IActivityManagerHook;
+import com.chen.plugin.hook.proxy.PluginCallbackHook;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -133,7 +134,7 @@ public class HookFactory {
 //            installHook(new ILocationManagerBinderHook(context), classLoader);
 //        }
 //
-//        installHook(new PluginCallbackHook(context), classLoader);
+        installHook(new PluginCallbackHook(context), classLoader);
 //        installHook(new InstrumentationHook(context), classLoader);
 //        installHook(new LibCoreHook(context), classLoader);
 //

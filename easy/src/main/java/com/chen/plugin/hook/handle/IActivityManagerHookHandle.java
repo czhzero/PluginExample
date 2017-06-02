@@ -128,7 +128,9 @@ public class IActivityManagerHookHandle extends BaseHookHandle {
         protected boolean doReplaceIntentForStartActivityAPIHigh(Object[] args) throws RemoteException {
 
             int intentOfArgIndex = findFirstIntentIndexInArgs(args);
+
             if (args != null && args.length > 1 && intentOfArgIndex >= 0) {
+
                 Intent intent = (Intent) args[intentOfArgIndex];
 
                 //XXX String callingPackage = (String) args[1];
@@ -142,6 +144,7 @@ public class IActivityManagerHookHandle extends BaseHookHandle {
                 if (activityInfo != null && isPackagePlugin(activityInfo.packageName)) {
 
                     ComponentName component = selectProxyActivity(intent);
+
                     if (component != null) {
                         Intent newIntent = new Intent();
                         try {

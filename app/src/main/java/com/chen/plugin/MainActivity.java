@@ -8,6 +8,7 @@ import android.view.View;
 
 import com.chen.easyplugin.hook.proxy.FrameworkHookHelper;
 import com.chen.easyplugin.pm.PluginManager;
+import com.chen.plugin.core.PluginProcessManager;
 
 
 /**
@@ -49,13 +50,21 @@ public class MainActivity extends Activity {
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(newBase);
+
         try {
-            FrameworkHookHelper.hookActivityManagerNative();
-            FrameworkHookHelper.hookActivityThreadHandler();
-            FrameworkHookHelper.hookPackageManager();
-        } catch (Exception e) {
-            e.printStackTrace();
+            PluginProcessManager.installHook(getApplicationContext());
+            PluginProcessManager.setHookEnable(true);
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
         }
+
+//        try {
+//            FrameworkHookHelper.hookActivityManagerNative();
+//            FrameworkHookHelper.hookActivityThreadHandler();
+//            FrameworkHookHelper.hookPackageManager();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
 

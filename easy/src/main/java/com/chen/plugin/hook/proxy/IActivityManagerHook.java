@@ -7,6 +7,7 @@ import com.chen.plugin.hook.BaseHookHandle;
 import com.chen.easyplugin.reflect.FieldUtils;
 import com.chen.easyplugin.reflect.Utils;
 import com.chen.easyplugin.utils.LogUtils;
+import com.chen.plugin.hook.handle.IActivityManagerHookHandle;
 import com.chen.plugin.utils.MyProxy;
 import com.chen.plugin.utils.compat.ActivityManagerNativeCompat;
 import com.chen.plugin.utils.compat.IActivityManagerCompat;
@@ -33,7 +34,7 @@ public class IActivityManagerHook extends ProxyHook {
 
     @Override
     protected BaseHookHandle createHookHandle() {
-        return null;
+        return new IActivityManagerHookHandle(mHostContext);
     }
 
     @Override
