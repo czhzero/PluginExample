@@ -19,7 +19,7 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.text.TextUtils;
 
-import com.chen.easyplugin.reflect.MethodUtils;
+import com.chen.plugin.reflect.MethodUtils;
 import com.chen.easyplugin.utils.LogUtils;
 import com.chen.plugin.aidl.IApplicationCallback;
 import com.chen.plugin.aidl.IPackageDataObserver;

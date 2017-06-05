@@ -1,6 +1,6 @@
 package com.chen.plugin.utils.compat;
 
-import com.chen.easyplugin.reflect.MethodUtils;
+import com.chen.plugin.reflect.MethodUtils;
 
 import java.lang.reflect.InvocationTargetException;
 

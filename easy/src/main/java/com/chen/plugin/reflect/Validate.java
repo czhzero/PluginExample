@@ -1,4 +1,4 @@
-package com.chen.easyplugin.reflect;
+package com.chen.plugin.reflect;
 
 /**
  * Created by chenzhaohua on 17/5/16.

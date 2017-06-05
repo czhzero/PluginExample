@@ -1,4 +1,4 @@
-package com.chen.easyplugin.reflect;
+package com.chen.plugin.reflect;
 
 import java.util.ArrayList;
 import java.util.HashSet;

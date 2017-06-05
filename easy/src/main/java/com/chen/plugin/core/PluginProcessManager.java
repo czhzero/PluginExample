@@ -43,8 +43,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 
-import com.chen.easyplugin.reflect.FieldUtils;
-import com.chen.easyplugin.reflect.MethodUtils;
+import com.chen.plugin.reflect.FieldUtils;
+import com.chen.plugin.reflect.MethodUtils;
 import com.chen.easyplugin.utils.LogUtils;
 import com.chen.plugin.hook.HookFactory;
 import com.chen.plugin.pm.PluginManager;

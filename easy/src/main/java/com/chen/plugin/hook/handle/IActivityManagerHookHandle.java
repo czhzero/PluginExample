@@ -1,33 +1,20 @@
 package com.chen.plugin.hook.handle;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.ProviderInfo;
 import android.content.pm.ServiceInfo;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.PixelFormat;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.IBinder;
-import android.os.Looper;
 import android.os.RemoteException;
 import android.text.TextUtils;
 
 
-import com.chen.easyplugin.reflect.FieldUtils;
-import com.chen.easyplugin.reflect.MethodUtils;
+import com.chen.plugin.reflect.FieldUtils;
 import com.chen.easyplugin.utils.LogUtils;
 import com.chen.plugin.am.RunningActivities;
 import com.chen.plugin.core.PluginProcessManager;

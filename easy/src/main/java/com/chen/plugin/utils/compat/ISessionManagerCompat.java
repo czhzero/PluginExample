@@ -22,29 +22,27 @@
 
 package com.chen.plugin.utils.compat;
 
+import android.os.IBinder;
 
-import com.chen.plugin.reflect.FieldUtils;
+import com.morgoo.droidplugin.reflect.MethodUtils;
+
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * Created by Andy Zhang(zhangyong232@gmail.com) on 2015/5/1.
  */
-public class CompatibilityInfoCompat {
-
+public class ISessionManagerCompat {
     private static Class sClass;
 
-    private static Class getMyClass() throws ClassNotFoundException {
+    public static Class Class() throws ClassNotFoundException {
         if (sClass == null) {
-            sClass = Class.forName("android.content.res.CompatibilityInfo");
+            sClass = Class.forName("android.media.session.ISessionManager");
         }
         return sClass;
     }
 
-    private static Object sDefaultCompatibilityInfo;
-
-    public static Object DEFAULT_COMPATIBILITY_INFO() throws IllegalAccessException, ClassNotFoundException {
-        if (sDefaultCompatibilityInfo==null) {
-            sDefaultCompatibilityInfo = FieldUtils.readStaticField(getMyClass(), "DEFAULT_COMPATIBILITY_INFO");
-        }
-        return sDefaultCompatibilityInfo;
+    public static Object asInterface(IBinder binder) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        Class clazz = Class.forName("android.media.session.ISessionManager$Stub");
+        return MethodUtils.invokeStaticMethod(clazz, "asInterface", binder);
     }
 }

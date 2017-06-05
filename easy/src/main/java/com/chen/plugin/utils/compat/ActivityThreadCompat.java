@@ -27,7 +27,7 @@ import android.os.Handler;
 import android.os.Looper;
 
 
-import com.chen.easyplugin.reflect.MethodUtils;
+import com.chen.plugin.reflect.MethodUtils;
 
 import java.lang.reflect.InvocationTargetException;
 

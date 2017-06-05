@@ -26,14 +26,13 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
-import com.chen.easyplugin.reflect.FieldUtils;
+import com.chen.plugin.reflect.FieldUtils;
 import com.chen.easyplugin.utils.LogUtils;
 import com.chen.plugin.core.PluginConstant;
 import com.chen.plugin.core.PluginProcessManager;

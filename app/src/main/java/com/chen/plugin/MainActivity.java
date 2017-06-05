@@ -51,12 +51,7 @@ public class MainActivity extends Activity {
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(newBase);
 
-        try {
-            PluginProcessManager.installHook(getApplicationContext());
-            PluginProcessManager.setHookEnable(true);
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
-        }
+        PluginApplication.applicationOnCreate(newBase);
 
 //        try {
 //            FrameworkHookHelper.hookActivityManagerNative();

@@ -22,29 +22,29 @@
 
 package com.chen.plugin.utils.compat;
 
+import com.morgoo.droidplugin.reflect.MethodUtils;
 
-import com.chen.plugin.reflect.FieldUtils;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * Created by Andy Zhang(zhangyong232@gmail.com) on 2015/5/1.
  */
-public class CompatibilityInfoCompat {
+public class QueuedWorkCompat {
 
     private static Class sClass;
 
-    private static Class getMyClass() throws ClassNotFoundException {
+    private static Class Class() throws ClassNotFoundException {
         if (sClass == null) {
-            sClass = Class.forName("android.content.res.CompatibilityInfo");
+            sClass = Class.forName("android.app.QueuedWork");
         }
         return sClass;
     }
 
-    private static Object sDefaultCompatibilityInfo;
-
-    public static Object DEFAULT_COMPATIBILITY_INFO() throws IllegalAccessException, ClassNotFoundException {
-        if (sDefaultCompatibilityInfo==null) {
-            sDefaultCompatibilityInfo = FieldUtils.readStaticField(getMyClass(), "DEFAULT_COMPATIBILITY_INFO");
+    public static void waitToFinish() {
+        try {
+            MethodUtils.invokeStaticMethod(Class(), "waitToFinish");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return sDefaultCompatibilityInfo;
     }
 }

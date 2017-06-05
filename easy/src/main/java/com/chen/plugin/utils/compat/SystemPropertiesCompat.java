@@ -23,28 +23,34 @@
 package com.chen.plugin.utils.compat;
 
 
-import com.chen.plugin.reflect.FieldUtils;
+import java.lang.reflect.InvocationTargetException;
 
 /**
- * Created by Andy Zhang(zhangyong232@gmail.com) on 2015/5/1.
+ * Created by zhangyong on 15/5/1.
  */
-public class CompatibilityInfoCompat {
+public class SystemPropertiesCompat {
 
-    private static Class sClass;
+    private static Class<?> sClass;
 
     private static Class getMyClass() throws ClassNotFoundException {
         if (sClass == null) {
-            sClass = Class.forName("android.content.res.CompatibilityInfo");
+            sClass = Class.forName("android.os.SystemProperties");
         }
         return sClass;
     }
 
-    private static Object sDefaultCompatibilityInfo;
+    private static String getInner(String key, String defaultValue) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
+        Class clazz = getMyClass();
+        return (String) MethodUtils.invokeStaticMethod(clazz, "get", key, defaultValue);
+    }
 
-    public static Object DEFAULT_COMPATIBILITY_INFO() throws IllegalAccessException, ClassNotFoundException {
-        if (sDefaultCompatibilityInfo==null) {
-            sDefaultCompatibilityInfo = FieldUtils.readStaticField(getMyClass(), "DEFAULT_COMPATIBILITY_INFO");
+    public static String get(String key, String defaultValue) {
+        try {
+            return getInner(key, defaultValue);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return defaultValue;
         }
-        return sDefaultCompatibilityInfo;
     }
 }
+

@@ -20,31 +20,29 @@
 **
 **/
 
-package com.chen.plugin.utils.compat;
+package com.chen.plugin.utils;
 
+import android.content.ComponentName;
+import android.text.TextUtils;
 
-import com.chen.plugin.reflect.FieldUtils;
+import java.util.Comparator;
 
-/**
- * Created by Andy Zhang(zhangyong232@gmail.com) on 2015/5/1.
- */
-public class CompatibilityInfoCompat {
+public class ComponentNameComparator implements Comparator<ComponentName> {
 
-    private static Class sClass;
-
-    private static Class getMyClass() throws ClassNotFoundException {
-        if (sClass == null) {
-            sClass = Class.forName("android.content.res.CompatibilityInfo");
+    @Override
+    public int compare(ComponentName lhs, ComponentName rhs) {
+        if (lhs == null && rhs == null) {
+            return 0;
+        } else if (lhs != null && rhs == null) {
+            return 1;
+        } else if (lhs == null && rhs != null) {
+            return -1;
+        } else {
+            if (TextUtils.equals(lhs.getPackageName(), rhs.getPackageName()) && TextUtils.equals(lhs.getShortClassName(), rhs.getShortClassName())) {
+                return 0;
+            } else {
+                return lhs.compareTo(rhs);
+            }
         }
-        return sClass;
-    }
-
-    private static Object sDefaultCompatibilityInfo;
-
-    public static Object DEFAULT_COMPATIBILITY_INFO() throws IllegalAccessException, ClassNotFoundException {
-        if (sDefaultCompatibilityInfo==null) {
-            sDefaultCompatibilityInfo = FieldUtils.readStaticField(getMyClass(), "DEFAULT_COMPATIBILITY_INFO");
-        }
-        return sDefaultCompatibilityInfo;
     }
 }
