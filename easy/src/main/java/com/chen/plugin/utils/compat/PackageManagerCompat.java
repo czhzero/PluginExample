@@ -22,28 +22,15 @@
 
 package com.chen.plugin.utils.compat;
 
-import android.os.IBinder;
-
-import com.morgoo.droidplugin.reflect.MethodUtils;
-
-import java.lang.reflect.InvocationTargetException;
-
 /**
- * Created by Andy Zhang(zhangyong232@gmail.com) on 2016/2/25.
+ * Created by Andy Zhang(zhangyong232@gmail.com) on 2015/4/13.
  */
-public class ILocationManagerCompat {
-
-    private static Class sClass;
-
-    public static Class Class() throws ClassNotFoundException {
-        if (sClass == null) {
-            sClass = Class.forName("android.location.ILocationManager");
-        }
-        return sClass;
-    }
-
-    public static Object asInterface( IBinder binder) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-        Class clazz = Class.forName("android.location.ILocationManager$Stub");
-        return MethodUtils.invokeStaticMethod(clazz, "asInterface", binder);
-    }
+public class PackageManagerCompat {
+    public static final int DELETE_FAILED_INTERNAL_ERROR = -1;
+    public static final int DELETE_SUCCEEDED = 1;
+    public static final int INSTALL_SUCCEEDED = 1;
+    public static final int INSTALL_FAILED_INTERNAL_ERROR = -110;
+    public static final int INSTALL_FAILED_INVALID_APK = -2;
+    public static final int INSTALL_REPLACE_EXISTING = 0x00000002;
+    public static final int INSTALL_FAILED_ALREADY_EXISTS = -1;
 }

@@ -36,10 +36,10 @@ import android.content.pm.Signature;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 
-import com.morgoo.droidplugin.reflect.FieldUtils;
-import com.morgoo.droidplugin.reflect.MethodUtils;
-import com.morgoo.helper.Log;
-import com.morgoo.helper.compat.UserHandleCompat;
+import com.chen.easyplugin.utils.LogUtils;
+import com.chen.plugin.reflect.FieldUtils;
+import com.chen.plugin.reflect.MethodUtils;
+import com.chen.plugin.utils.compat.UserHandleCompat;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
@@ -191,7 +191,7 @@ class PackageParserApi21 extends PackageParser {
                     int[].class, int.class, long.class, long.class, Set.class, sPackageUserStateClass, int.class);
             return (PackageInfo) method.invoke(null, mPackage, gids, flags, firstInstallTime, lastUpdateTime, grantedPermissions, mDefaultPackageUserState, mUserId);
         } catch (NoSuchMethodException e) {
-            Log.i(TAG, "get generatePackageInfo 1 fail", e);
+            LogUtils.i(TAG, "get generatePackageInfo 1 fail", e);
         }
 
         try {
@@ -200,7 +200,7 @@ class PackageParserApi21 extends PackageParser {
                     int[].class, int.class, long.class, long.class, HashSet.class, sPackageUserStateClass, int.class);
             return (PackageInfo) method.invoke(null, mPackage, gids, flags, firstInstallTime, lastUpdateTime, grantedPermissions, mDefaultPackageUserState, mUserId);
         } catch (NoSuchMethodException e) {
-            Log.i(TAG, "get generatePackageInfo 2 fail", e);
+            LogUtils.i(TAG, "get generatePackageInfo 2 fail", e);
         }
 
         try {
@@ -218,7 +218,7 @@ class PackageParserApi21 extends PackageParser {
                 grantedPermissionsArray = grantedPermissions;            }
             return (PackageInfo) method.invoke(null, mPackage, gids, flags, firstInstallTime, lastUpdateTime, grantedPermissionsArray, mDefaultPackageUserState, mUserId);
         } catch (NoSuchMethodException e) {
-            Log.i(TAG, "get generatePackageInfo 3 fail", e);
+            LogUtils.i(TAG, "get generatePackageInfo 3 fail", e);
         }
 
         throw new NoSuchMethodException("Can not found method generatePackageInfo");

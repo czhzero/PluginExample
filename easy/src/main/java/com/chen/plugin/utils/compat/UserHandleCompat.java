@@ -22,28 +22,23 @@
 
 package com.chen.plugin.utils.compat;
 
-import android.os.IBinder;
+import android.os.UserHandle;
 
-import com.morgoo.droidplugin.reflect.MethodUtils;
+import com.chen.plugin.reflect.MethodUtils;
 
-import java.lang.reflect.InvocationTargetException;
 
 /**
- * Created by Andy Zhang(zhangyong232@gmail.com) on 2015/6/17.
+ * Created by Andy Zhang(zhangyong232@gmail.com) on 2015/4/13.
  */
-public class IWindowManagerCompat {
+public class UserHandleCompat {
 
-    private static Class sClass;
-
-    public static Class Class() throws ClassNotFoundException {
-        if (sClass == null) {
-            sClass = Class.forName("android.view.IWindowManager");
+    //    UserHandle.getCallingUserId()
+    public static int getCallingUserId() {
+        try {
+            return (int) MethodUtils.invokeStaticMethod(UserHandle.class, "getCallingUserId");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return sClass;
-    }
-
-    public static Object asInterface( IBinder binder) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-        Class clazz = Class.forName("android.view.IWindowManager$Stub");
-        return MethodUtils.invokeStaticMethod(clazz, "asInterface", binder);
+        return 0;
     }
 }

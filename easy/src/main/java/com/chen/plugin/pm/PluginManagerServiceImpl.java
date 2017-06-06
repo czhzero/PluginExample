@@ -21,9 +21,20 @@ import android.os.Build;
 import android.os.RemoteException;
 import android.text.TextUtils;
 
+import com.chen.easyplugin.utils.LogUtils;
 import com.chen.plugin.aidl.IApplicationCallback;
 import com.chen.plugin.aidl.IPackageDataObserver;
 import com.chen.plugin.aidl.IPluginManagerService;
+import com.chen.plugin.am.BaseActivityManagerService;
+import com.chen.plugin.am.MyActivityManagerService;
+import com.chen.plugin.core.PluginClassLoader;
+import com.chen.plugin.core.PluginDirHelper;
+import com.chen.plugin.pm.parser.IntentMatcher;
+import com.chen.plugin.pm.parser.PluginPackageParser;
+import com.chen.plugin.utils.Utils;
+import com.chen.plugin.utils.compat.BuildCompat;
+import com.chen.plugin.utils.compat.PackageManagerCompat;
+import com.chen.plugin.utils.compat.VMRuntimeCompat;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -120,10 +131,10 @@ public class PluginManagerServiceImpl extends IPluginManagerService.Stub {
                 }
             }
         } catch (Exception e) {
-            Log.e(TAG, "scan a apk file error", e);
+            LogUtils.e(TAG, "scan a apk file error", e);
         }
 
-        Log.i(TAG, "Search apk cost %s ms", (System.currentTimeMillis() - b));
+        LogUtils.i(TAG, "Search apk cost %s ms", (System.currentTimeMillis() - b));
         b = System.currentTimeMillis();
 
         if (apkfiles != null && apkfiles.size() > 0) {
@@ -144,23 +155,23 @@ public class PluginManagerServiceImpl extends IPluginManagerService.Stub {
                         mPluginCache.put(pluginPackageParser.getPackageName(), pluginPackageParser);
                     }
                 } catch (Throwable e) {
-                    Log.e(TAG, "parse a apk file error %s", e, pluginFile.getPath());
+                    LogUtils.e(TAG, "parse a apk file error %s", e, pluginFile.getPath());
                 } finally {
-                    Log.i(TAG, "Parse %s apk cost %s ms", pluginFile.getPath(), (System.currentTimeMillis() - b1));
+                    LogUtils.i(TAG, "Parse %s apk cost %s ms", pluginFile.getPath(), (System.currentTimeMillis() - b1));
                 }
             }
         }
 
-        Log.i(TAG, "Parse all apk cost %s ms", (System.currentTimeMillis() - b));
+        LogUtils.i(TAG, "Parse all apk cost %s ms", (System.currentTimeMillis() - b));
         b = System.currentTimeMillis();
 
         try {
-            mActivityManagerService.onCreate(IPluginManagerImpl.this);
+            mActivityManagerService.onCreate(this);
         } catch (Throwable e) {
-            Log.e(TAG, "mActivityManagerService.onCreate", e);
+            LogUtils.e(TAG, "mActivityManagerService.onCreate", e);
         }
 
-        Log.i(TAG, "ActivityManagerService.onCreate %s ms", (System.currentTimeMillis() - b));
+        LogUtils.i(TAG, "ActivityManagerService.onCreate %s ms", (System.currentTimeMillis() - b));
     }
 
     private void enforcePluginFileExists() throws RemoteException {
@@ -820,7 +831,7 @@ public class PluginManagerServiceImpl extends IPluginManagerService.Stub {
                         } catch (PackageManager.NameNotFoundException e) {
                         }
                         if (!mHostRequestedPermission.contains(requestedPermission) && b) {
-                            Log.e(TAG, "No Permission %s", requestedPermission);
+                            LogUtils.e(TAG, "No Permission %s", requestedPermission);
                             new File(apkfile).delete();
                             return PluginManager.INSTALL_FAILED_NO_REQUESTEDPERMISSION;
                         }
@@ -829,7 +840,7 @@ public class PluginManagerServiceImpl extends IPluginManagerService.Stub {
                 saveSignatures(pkgInfo);
 //                if (pkgInfo.reqFeatures != null && pkgInfo.reqFeatures.length > 0) {
 //                    for (FeatureInfo reqFeature : pkgInfo.reqFeatures) {
-//                        Log.e(TAG, "reqFeature name=%s,flags=%s,glesVersion=%s", reqFeature.name, reqFeature.flags, reqFeature.getGlEsVersion());
+//                        LogUtils.e(TAG, "reqFeature name=%s,flags=%s,glesVersion=%s", reqFeature.name, reqFeature.flags, reqFeature.getGlEsVersion());
 //                    }
 //                }
                 copyNativeLibs(mContext, apkfile, parser.getApplicationInfo(0));
@@ -856,7 +867,7 @@ public class PluginManagerServiceImpl extends IPluginManagerService.Stub {
                             } catch (PackageManager.NameNotFoundException e) {
                             }
                             if (!mHostRequestedPermission.contains(requestedPermission) && b) {
-                                Log.e(TAG, "No Permission %s", requestedPermission);
+                                LogUtils.e(TAG, "No Permission %s", requestedPermission);
                                 new File(apkfile).delete();
                                 return PluginManager.INSTALL_FAILED_NO_REQUESTEDPERMISSION;
                             }
@@ -865,7 +876,7 @@ public class PluginManagerServiceImpl extends IPluginManagerService.Stub {
                     saveSignatures(pkgInfo);
 //                    if (pkgInfo.reqFeatures != null && pkgInfo.reqFeatures.length > 0) {
 //                        for (FeatureInfo reqFeature : pkgInfo.reqFeatures) {
-//                            Log.e(TAG, "reqFeature name=%s,flags=%s,glesVersion=%s", reqFeature.name, reqFeature.flags, reqFeature.getGlEsVersion());
+//                            LogUtils.e(TAG, "reqFeature name=%s,flags=%s,glesVersion=%s", reqFeature.name, reqFeature.flags, reqFeature.getGlEsVersion());
 //                        }
 //                    }
 
@@ -892,7 +903,7 @@ public class PluginManagerServiceImpl extends IPluginManagerService.Stub {
         String libraryPath = PluginDirHelper.getPluginNativeLibraryDir(hostContext, packageName);
         ClassLoader classloader = new PluginClassLoader(apkfile, optimizedDirectory, libraryPath, ClassLoader.getSystemClassLoader());
 //        DexFile dexFile = DexFile.loadDex(apkfile, PluginDirHelper.getPluginDalvikCacheFile(mContext, parser.getPackageName()), 0);
-//        Log.e(TAG, "dexFile=%s,1=%s,2=%s", dexFile, DexFile.isDexOptNeeded(apkfile), DexFile.isDexOptNeeded(PluginDirHelper.getPluginDalvikCacheFile(mContext, parser.getPackageName())));
+//        LogUtils.e(TAG, "dexFile=%s,1=%s,2=%s", dexFile, DexFile.isDexOptNeeded(apkfile), DexFile.isDexOptNeeded(PluginDirHelper.getPluginDalvikCacheFile(mContext, parser.getPackageName())));
     }
 
     private void saveSignatures(PackageInfo pkgInfo) {
@@ -902,10 +913,10 @@ public class PluginManagerServiceImpl extends IPluginManagerService.Stub {
                 File file = new File(PluginDirHelper.getPluginSignatureFile(mContext, pkgInfo.packageName, i));
                 try {
                     Utils.writeToFile(file, signature.toByteArray());
-                    Log.i(TAG, "Save %s signature of %s,md5=%s", pkgInfo.packageName, i, Utils.md5(signature.toByteArray()));
+                    LogUtils.i(TAG, "Save %s signature of %s,md5=%s", pkgInfo.packageName, i, Utils.md5(signature.toByteArray()));
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Log.w(TAG, "Save signatures fail", e);
+                    LogUtils.w(TAG, "Save signatures fail", e);
                     file.delete();
                     Utils.deleteDir(PluginDirHelper.getPluginSignatureDir(mContext, pkgInfo.packageName));
                     break;
@@ -925,14 +936,14 @@ public class PluginManagerServiceImpl extends IPluginManagerService.Stub {
                 if (data != null) {
                     Signature sin = new Signature(data);
                     signatures.add(sin);
-                    Log.i(TAG, "Read %s signature of %s,md5=%s", packageName, i, Utils.md5(sin.toByteArray()));
+                    LogUtils.i(TAG, "Read %s signature of %s,md5=%s", packageName, i, Utils.md5(sin.toByteArray()));
                 } else {
-                    Log.i(TAG, "Read %s signature of %s FAIL", packageName, i);
+                    LogUtils.i(TAG, "Read %s signature of %s FAIL", packageName, i);
                     return null;
                 }
                 i++;
             } catch (Exception e) {
-                Log.i(TAG, "Read %s signature of %s FAIL", e, packageName, i);
+                LogUtils.i(TAG, "Read %s signature of %s FAIL", e, packageName, i);
                 return null;
             }
         }
@@ -964,7 +975,7 @@ public class PluginManagerServiceImpl extends IPluginManagerService.Stub {
                 ZipEntry entry = entries.nextElement();
                 String name = entry.getName();
                 if (name.contains("../")) {
-                    Log.d(TAG, "Path traversal attack prevented");
+                    LogUtils.d(TAG, "Path traversal attack prevented");
                     continue;
                 }
                 if (name.startsWith("lib/") && !entry.isDirectory()) {
@@ -980,7 +991,7 @@ public class PluginManagerServiceImpl extends IPluginManagerService.Stub {
             }
 
             for (String soName : soList.keySet()) {
-                Log.e(TAG, "try so =" + soName);
+                LogUtils.e(TAG, "try so =" + soName);
                 Set<String> soPaths = soList.get(soName);
                 String soPath = findSoPath(soPaths, soName);
                 if (soPath != null) {
@@ -1000,7 +1011,7 @@ public class PluginManagerServiceImpl extends IPluginManagerService.Stub {
                         }
                         ou.flush();
                         ou.getFD().sync();
-                        Log.i(TAG, "copy so(%s) for %s to %s ok!", soName, soPath, file.getPath());
+                        LogUtils.i(TAG, "copy so(%s) for %s to %s ok!", soName, soPath, file.getPath());
                     } catch (Exception e) {
                         if (file.exists()) {
                             file.delete();
@@ -1268,7 +1279,7 @@ public class PluginManagerServiceImpl extends IPluginManagerService.Stub {
                 String[] pkgListCopy = Arrays.copyOf(info.pkgList, info.pkgList.length);
                 Arrays.sort(pkgListCopy);
                 if (Arrays.binarySearch(pkgListCopy, pluginPackageName) >= 0 && info.pid != android.os.Process.myPid()) {
-                    Log.i(TAG, "killBackgroundProcesses(%s),pkgList=%s,pid=%s", pluginPackageName, Arrays.toString(info.pkgList), info.pid);
+                    LogUtils.i(TAG, "killBackgroundProcesses(%s),pkgList=%s,pid=%s", pluginPackageName, Arrays.toString(info.pkgList), info.pid);
                     android.os.Process.killProcess(info.pid);
                     success = true;
                 }

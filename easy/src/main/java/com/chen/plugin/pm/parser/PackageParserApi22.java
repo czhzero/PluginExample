@@ -27,8 +27,9 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.os.Build;
 
-import com.morgoo.droidplugin.reflect.MethodUtils;
-import com.morgoo.helper.Log;
+
+import com.chen.easyplugin.utils.LogUtils;
+import com.chen.plugin.reflect.MethodUtils;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -56,7 +57,7 @@ class PackageParserApi22 extends PackageParserApi21 {
         try {
             return super.generatePackageInfo(gids, flags, firstInstallTime, lastUpdateTime, grantedPermissions);
         } catch (Exception e) {
-            Log.i(TAG, "generatePackageInfo fail", e);
+            LogUtils.i(TAG, "generatePackageInfo fail", e);
         }
 
         Method method = MethodUtils.getAccessibleMethod(sPackageParserClass, "generatePackageInfo",

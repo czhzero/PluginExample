@@ -22,37 +22,34 @@
 
 package com.chen.plugin.utils.compat;
 
+import android.os.Build;
 
+import com.chen.easyplugin.utils.LogUtils;
 import com.chen.plugin.reflect.MethodUtils;
 
-import java.lang.reflect.InvocationTargetException;
 
 /**
- * Created by zhangyong on 15/5/1.
+ * Created by Andy Zhang(zhangyong232@gmail.com) on 2016/2/4.
  */
-public class SystemPropertiesCompat {
+public class VMRuntimeCompat {
 
-    private static Class<?> sClass;
+    private static final String TAG = VMRuntimeCompat.class.getSimpleName();
 
-    private static Class getMyClass() throws ClassNotFoundException {
-        if (sClass == null) {
-            sClass = Class.forName("android.os.SystemProperties");
-        }
-        return sClass;
-    }
-
-    private static String getInner(String key, String defaultValue) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
-        Class clazz = getMyClass();
-        return (String) MethodUtils.invokeStaticMethod(clazz, "get", key, defaultValue);
-    }
-
-    public static String get(String key, String defaultValue) {
+    public final static boolean is64Bit() {
+        //  dalvik.system.VMRuntime.getRuntime().is64Bit();
         try {
-            return getInner(key, defaultValue);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return defaultValue;
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                return false;
+            }
+            Class VMRuntime = Class.forName("dalvik.system.VMRuntime");
+            Object VMRuntimeObj = MethodUtils.invokeStaticMethod(VMRuntime, "getRuntime");
+            Object is64Bit = MethodUtils.invokeMethod(VMRuntimeObj, "is64Bit");
+            if (is64Bit instanceof Boolean) {
+                return ((Boolean) is64Bit);
+            }
+        } catch (Throwable e) {
+            LogUtils.w(TAG, "is64Bit", e);
         }
+        return false;
     }
 }
-

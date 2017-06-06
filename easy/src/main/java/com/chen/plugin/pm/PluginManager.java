@@ -38,6 +38,25 @@ import java.util.List;
  */
 public class PluginManager implements ServiceConnection {
 
+    public static final String ACTION_PACKAGE_ADDED = "com.morgoo.doirplugin.PACKAGE_ADDED";
+    public static final String ACTION_PACKAGE_REMOVED = "com.morgoo.doirplugin.PACKAGE_REMOVED";
+    public static final String ACTION_DROIDPLUGIN_INIT = "com.morgoo.droidplugin.ACTION_DROIDPLUGIN_INIT";
+    public static final String ACTION_MAINACTIVITY_ONCREATE = "com.morgoo.droidplugin.ACTION_MAINACTIVITY_ONCREATE";
+    public static final String ACTION_MAINACTIVITY_ONDESTORY = "com.morgoo.droidplugin.ACTION_MAINACTIVITY_ONDESTORY";
+    public static final String ACTION_SETTING = "com.morgoo.droidplugin.ACTION_SETTING";
+    public static final String ACTION_SHORTCUT_PROXY = "com.morgoo.droidplugin.ACTION_SHORTCUT_PROXY";
+
+
+    public static final String EXTRA_PID = "com.morgoo.droidplugin.EXTRA_PID";
+    public static final String EXTRA_PACKAGENAME = "com.morgoo.droidplugin.EXTRA_EXTRA_PACKAGENAME";
+
+    public static final String STUB_AUTHORITY_NAME = "com.morgoo.droidplugin_stub";
+    public static final String EXTRA_APP_PERSISTENT = "com.morgoo.droidplugin.EXTRA_APP_PERSISTENT";
+
+
+    public static final int INSTALL_FAILED_NO_REQUESTEDPERMISSION = -100001;
+    public static final int STUB_NO_ACTIVITY_MAX_NUM = 4;
+
     private static final String TAG = PluginManager.class.getSimpleName();
 
 
