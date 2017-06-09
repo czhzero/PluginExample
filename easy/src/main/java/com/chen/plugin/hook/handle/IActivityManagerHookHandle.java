@@ -2108,40 +2108,33 @@ public class IActivityManagerHookHandle extends BaseHookHandle {
 
 
     private static ActivityInfo resolveActivity(Intent intent) throws RemoteException {
-        return null;
-//        return PluginManager.getInstance().resolveActivityInfo(intent, 0);
+        return PluginManager.getInstance().resolveActivityInfo(intent, 0);
     }
 
     private static ServiceInfo resolveService(Intent intent) throws RemoteException {
-        return null;
-//        return PluginManager.getInstance().resolveServiceInfo(intent, 0);
+        return PluginManager.getInstance().resolveServiceInfo(intent, 0);
     }
 
 
     private static boolean isPackagePlugin(String packageName) throws RemoteException {
-        return true;
-
-//        return PluginManager.getInstance().getBundleByPackageName(packageName) != null;
+        return PluginManager.getInstance().isPluginPackage(packageName);
     }
 
     private static boolean isComponentNamePlugin(ComponentName className) throws RemoteException {
-        return true;
-//        return PluginManager.getInstance().isPluginPackage(className);
+        return PluginManager.getInstance().isPluginPackage(className);
     }
 
     private static ApplicationInfo queryPluginApplicationInfo(String packageName) throws RemoteException {
-
-        return null;
-//        return PluginManager.getInstance().getApplicationInfo(packageName, 0);
+        return PluginManager.getInstance().getApplicationInfo(packageName, 0);
     }
 
 
     private static boolean clearPluginApplicationUserData(String packageName, final Object observer) throws RemoteException {
-//        if (observer == null) {
-//            PluginManager.getInstance().clearApplicationUserData(packageName, null);
-//        } else {
-//            PluginManager.getInstance().clearApplicationUserData(packageName, observer);
-//        }
+        if (observer == null) {
+            PluginManager.getInstance().clearApplicationUserData(packageName, null);
+        } else {
+            PluginManager.getInstance().clearApplicationUserData(packageName, observer);
+        }
         return true;
     }
 

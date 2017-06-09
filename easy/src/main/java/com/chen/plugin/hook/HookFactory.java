@@ -62,6 +62,7 @@ public class HookFactory {
         synchronized (mHookList) {
             for (BaseHook hook : mHookList) {
                 hook.setEnable(enable);
+                LogUtils.d(TAG, "1 " + hook.getClass().getSimpleName() + " setEnable = " + enable);
             }
         }
     }
@@ -70,6 +71,7 @@ public class HookFactory {
         synchronized (mHookList) {
             for (BaseHook hook : mHookList) {
                 hook.setEnable(enable, reinstallHook);
+                LogUtils.d(TAG, "2 " + hook.getClass().getSimpleName() + " setEnable = " + enable);
             }
         }
     }

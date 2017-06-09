@@ -6,7 +6,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true">
 
-
+        <!--插件管理服务，提供插件的包管理，进程管理。-->
+        <service
+            android:name="com.chen.plugin.pm.PluginManagerService" />
 
         <activity
             android:name="com.chen.easyplugin.stub.ActivityStub$P00$Standard00"

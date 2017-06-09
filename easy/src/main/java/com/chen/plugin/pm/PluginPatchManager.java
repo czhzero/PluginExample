@@ -23,6 +23,7 @@ public class PluginPatchManager {
     private long lStartTime = 0;
 
     private static PluginPatchManager s_inst = new PluginPatchManager();
+
     public static PluginPatchManager getInstance() {
         return s_inst;
     }
@@ -37,6 +38,7 @@ public class PluginPatchManager {
             return true;
 
         ComponentName name = intent.getComponent();
+
         if (name != null && mContext != null && !name.getPackageName().equals(mContext.getPackageName()))
             return false;
 

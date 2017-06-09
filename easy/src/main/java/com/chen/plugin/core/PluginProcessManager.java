@@ -151,6 +151,7 @@ public class PluginProcessManager {
     }
 
     public static final boolean isPluginProcess(Context context) {
+
         String currentProcessName = getCurrentProcessName(context);
         if (TextUtils.equals(currentProcessName, context.getPackageName()))
             return false;

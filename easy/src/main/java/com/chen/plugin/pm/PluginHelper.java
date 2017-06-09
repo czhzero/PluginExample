@@ -43,7 +43,9 @@ import java.util.HashMap;
 public class PluginHelper implements ServiceConnection {
 
     private static final String TAG = PluginHelper.class.getSimpleName();
+
     private static PluginHelper sInstance = null;
+    private Context mContext;
 
     private PluginHelper() {
     }
@@ -60,7 +62,7 @@ public class PluginHelper implements ServiceConnection {
         initPlugin(baseContext);
     }
 
-    private Context mContext;
+
 
     private void initPlugin(Context baseContext) {
 

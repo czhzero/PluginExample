@@ -16,7 +16,7 @@ public class LogUtils {
 
     private static final String TAG = "czh";
 
-    private static boolean sDebug = false;
+    private static boolean sDebug = true;
 
     public static boolean isDebug() {
         return sDebug;

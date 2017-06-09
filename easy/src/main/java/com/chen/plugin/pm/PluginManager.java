@@ -53,7 +53,6 @@ public class PluginManager implements ServiceConnection {
     public static final String STUB_AUTHORITY_NAME = "com.morgoo.droidplugin_stub";
     public static final String EXTRA_APP_PERSISTENT = "com.morgoo.droidplugin.EXTRA_APP_PERSISTENT";
 
-
     public static final int INSTALL_FAILED_NO_REQUESTEDPERMISSION = -100001;
     public static final int STUB_NO_ACTIVITY_MAX_NUM = 4;
 
@@ -64,6 +63,7 @@ public class PluginManager implements ServiceConnection {
     private static PluginManager sInstance = null;
     private IPluginManagerService mPluginManager;
     private Object mWaitLock = new Object();
+
 
     private List<WeakReference<ServiceConnection>> sServiceConnection = Collections.synchronizedList(new ArrayList<WeakReference<ServiceConnection>>(1));
 
@@ -106,6 +106,7 @@ public class PluginManager implements ServiceConnection {
                     }, 0);
 
                     LogUtils.i(TAG, "PluginManager ready!");
+
                 } catch (Throwable e) {
                     LogUtils.e(TAG, "Lost the mPluginManager connect...", e);
                 } finally {
@@ -190,7 +191,9 @@ public class PluginManager implements ServiceConnection {
 
 
     public void connectToService() {
+
         if (mPluginManager == null) {
+            LogUtils.d(TAG, "try connectToService");
             try {
                 Intent intent = new Intent(mHostContext, PluginManagerService.class);
                 intent.setPackage(mHostContext.getPackageName());

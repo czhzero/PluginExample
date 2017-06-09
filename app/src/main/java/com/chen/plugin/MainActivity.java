@@ -1,14 +1,16 @@
 package com.chen.plugin;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.os.RemoteException;
 import android.view.View;
 
-import com.chen.easyplugin.hook.proxy.FrameworkHookHelper;
-import com.chen.easyplugin.pm.PluginManager;
-import com.chen.plugin.core.PluginProcessManager;
+import com.chen.plugin.pm.PluginManager;
 
 
 /**
@@ -22,6 +24,8 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
 
         findViewById(R.id.tv_entrance_1).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,6 +46,29 @@ public class MainActivity extends Activity {
         });
 
 
+        findViewById(R.id.tv_entrance_3).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    PluginManager.getInstance().installPackage("/sdcard/test2.apk", 1);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
+        findViewById(R.id.tv_entrance_4).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                PackageManager pm = getPackageManager();
+//                Intent intent = pm.getLaunchIntentForPackage("com.chen.testapp");
+//                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                startActivity(intent);
+                PluginApplication.applicationOnCreate(MainActivity.this.getApplicationContext());
+            }
+        });
+
 
 
     }
@@ -51,7 +78,6 @@ public class MainActivity extends Activity {
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(newBase);
 
-        PluginApplication.applicationOnCreate(newBase);
 
 //        try {
 //            FrameworkHookHelper.hookActivityManagerNative();
@@ -61,6 +87,8 @@ public class MainActivity extends Activity {
 //            e.printStackTrace();
 //        }
     }
+
+
 
 
 }

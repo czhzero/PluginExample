@@ -5,6 +5,8 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 
+import com.chen.easyplugin.utils.LogUtils;
+
 /**
  * Created by chenzhaohua on 17/5/18.
  *
@@ -19,6 +21,7 @@ public class PluginManagerService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        LogUtils.i(TAG, "PluginManagerService onCreate");
         keepAlive();
         mPluginManagerServiceBinder = new PluginManagerServiceImpl(this);
         mPluginManagerServiceBinder.onCreate();
@@ -38,6 +41,7 @@ public class PluginManagerService extends Service {
 
     @Override
     public void onDestroy() {
+        LogUtils.i(TAG, "PluginManagerService onDestroy");
         try {
             mPluginManagerServiceBinder.onDestroy();
         } catch (Exception e) {
@@ -48,11 +52,13 @@ public class PluginManagerService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
+        LogUtils.i(TAG, "PluginManagerService onBind");
         return mPluginManagerServiceBinder;
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        LogUtils.i(TAG, "PluginManagerService onStartCommand");
 //        //这里要处理IntentService
 //        IActivityManagerHookHandle.getIntentSender.handlePendingIntent(this, intent);
         return super.onStartCommand(intent, flags, startId);

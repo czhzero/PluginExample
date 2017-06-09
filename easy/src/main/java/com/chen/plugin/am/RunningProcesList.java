@@ -141,19 +141,18 @@ class RunningProcesList {
     }
 
     private boolean isPersistentApp(String packageName) {
-        //TODO 临时注释
-//        try {
-//            PackageInfo info = mHostContext.getPackageManager().getPackageInfo(packageName, PackageManager.GET_META_DATA);
-//            if (info != null && info.applicationInfo.metaData != null && info.applicationInfo.metaData.containsKey(PluginManager.EXTRA_APP_PERSISTENT)) {
-//                if ((info.applicationInfo.flags & ApplicationInfo.FLAG_PERSISTENT) != 0) {
-//                    return true;
-//                }
-//                boolean isPersistentApp = info.applicationInfo.metaData.getBoolean(PluginManager.EXTRA_APP_PERSISTENT);
-//                return isPersistentApp;
-//            }
-//        } catch (Exception e) {
-//            LogUtils.e(TAG, "isPersistentApp:error", e);
-//        }
+        try {
+            PackageInfo info = mHostContext.getPackageManager().getPackageInfo(packageName, PackageManager.GET_META_DATA);
+            if (info != null && info.applicationInfo.metaData != null && info.applicationInfo.metaData.containsKey(PluginManager.EXTRA_APP_PERSISTENT)) {
+                if ((info.applicationInfo.flags & ApplicationInfo.FLAG_PERSISTENT) != 0) {
+                    return true;
+                }
+                boolean isPersistentApp = info.applicationInfo.metaData.getBoolean(PluginManager.EXTRA_APP_PERSISTENT);
+                return isPersistentApp;
+            }
+        } catch (Exception e) {
+            LogUtils.e(TAG, "isPersistentApp:error", e);
+        }
         return false;
     }
 
