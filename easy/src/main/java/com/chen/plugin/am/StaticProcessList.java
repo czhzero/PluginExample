@@ -51,7 +51,7 @@ import java.util.Map;
  */
 class StaticProcessList {
 
-    private static final String CATEGORY_ACTIVITY_PROXY_STUB = "com.morgoo.droidplugin.category.PROXY_STUB";
+    private static final String CATEGORY_ACTIVITY_PROXY_STUB = "com.chen.plugin.category.PROXY_STUB";
 
 
     //key=processName value=ProcessItem

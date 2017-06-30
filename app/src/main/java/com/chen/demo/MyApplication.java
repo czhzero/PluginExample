@@ -1,10 +1,6 @@
-package com.chen.plugin;
+package com.chen.demo;
 
 import android.app.Application;
-
-import com.chen.easyplugin.core.PluginApplication;
-import com.chen.easyplugin.pm.PluginManager;
-import com.chen.plugin.core.PluginProcessManager;
 
 /**
  * Created by chenzhaohua on 17/4/27.

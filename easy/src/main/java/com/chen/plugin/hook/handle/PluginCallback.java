@@ -221,6 +221,9 @@ public class PluginCallback implements Handler.Callback {
 
     @Override
     public boolean handleMessage(Message msg) {
+        android.util.Log.d("czh", "msg.what = " + codeToString(msg.what));
+
+
         long b = System.currentTimeMillis();
         try {
             if (!mEnable) {

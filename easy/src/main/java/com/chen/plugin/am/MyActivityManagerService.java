@@ -329,6 +329,7 @@ public class MyActivityManagerService extends BaseActivityManagerService {
         }
 
         List<String> stubProcessNames = mStaticProcessList.getProcessNames();
+
         for (String stubProcessName : stubProcessNames) {
             List<ActivityInfo> stubInfos = mStaticProcessList.getActivityInfoForProcessName(stubProcessName, useDialogStyle);
             if (mRunningProcessList.isProcessRunning(stubProcessName)) {//该预定义的进程正在运行。

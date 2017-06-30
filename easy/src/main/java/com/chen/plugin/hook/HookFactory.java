@@ -24,11 +24,11 @@ package com.chen.plugin.hook;
 
 import android.app.Application;
 import android.content.Context;
-import android.os.Build.VERSION;
-import android.os.Build.VERSION_CODES;
 
 import com.chen.easyplugin.utils.LogUtils;
+import com.chen.plugin.hook.binder.IWindowManagerBinderHook;
 import com.chen.plugin.hook.proxy.IActivityManagerHook;
+import com.chen.plugin.hook.proxy.InstrumentationHook;
 import com.chen.plugin.hook.proxy.PluginCallbackHook;
 
 import java.util.ArrayList;
@@ -112,7 +112,7 @@ public class HookFactory {
 //        installHook(new IMountServiceBinder(context), classLoader);
 //        installHook(new IAudioServiceBinderHook(context), classLoader);
 //        installHook(new IContentServiceBinderHook(context), classLoader);
-//        installHook(new IWindowManagerBinderHook(context), classLoader);
+        installHook(new IWindowManagerBinderHook(context), classLoader);
 //        if (VERSION.SDK_INT > VERSION_CODES.LOLLIPOP_MR1) {
 //            installHook(new IGraphicsStatsBinderHook(context), classLoader);
 //        }
@@ -137,7 +137,7 @@ public class HookFactory {
 //        }
 //
         installHook(new PluginCallbackHook(context), classLoader);
-//        installHook(new InstrumentationHook(context), classLoader);
+        installHook(new InstrumentationHook(context), classLoader);
 //        installHook(new LibCoreHook(context), classLoader);
 //
 //        installHook(new SQLiteDatabaseHook(context), classLoader);

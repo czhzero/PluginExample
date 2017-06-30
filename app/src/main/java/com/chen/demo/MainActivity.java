@@ -1,15 +1,13 @@
-package com.chen.plugin;
+package com.chen.demo;
 
 import android.app.Activity;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.os.RemoteException;
 import android.view.View;
 
+import com.chen.plugin.PluginApplication;
 import com.chen.plugin.pm.PluginManager;
 
 
