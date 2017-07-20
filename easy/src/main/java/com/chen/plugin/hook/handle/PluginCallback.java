@@ -26,17 +26,20 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
-import com.chen.plugin.reflect.FieldUtils;
-import com.chen.easyplugin.utils.LogUtils;
-import com.chen.plugin.core.PluginConstant;
+import com.chen.plugin.core.Env;
 import com.chen.plugin.core.PluginProcessManager;
+import com.morgoo.droidplugin.hook.proxy.IPackageManagerHook;
 import com.chen.plugin.pm.PluginManager;
+import com.chen.plugin.reflect.FieldUtils;
+import com.morgoo.droidplugin.stub.ShortcutProxyActivity;
+import com.chen.plugin.helper.Log;
 
 
 public class PluginCallback implements Handler.Callback {
@@ -231,7 +234,7 @@ public class PluginCallback implements Handler.Callback {
                 if (!PluginManager.getInstance().isConnected()) {
                     //这里必须要这么做。如果当前进程是插件进程，并且，还没有绑定上插件管理服务，我们则把消息延迟一段时间再处理。
                     //这样虽然会降低启动速度，但是可以解决在没绑定服务就启动，会导致的一系列时序问题。
-                    LogUtils.i(TAG, "handleMessage not isConnected post and wait,msg=%s", msg);
+                    Log.i(TAG, "handleMessage not isConnected post and wait,msg=%s", msg);
                     mOldHandle.sendMessageDelayed(Message.obtain(msg), 5);
                     //返回true，告诉下面的handle不要处理了。
                     return true;
@@ -261,7 +264,7 @@ public class PluginCallback implements Handler.Callback {
                 return false;
             }
         } finally {
-            LogUtils.i(TAG, "handleMessage(%s,%s) cost %s ms", msg.what, codeToString(msg.what), (System.currentTimeMillis() - b));
+            Log.i(TAG, "handleMessage(%s,%s) cost %s ms", msg.what, codeToString(msg.what), (System.currentTimeMillis() - b));
 
         }
     }
@@ -352,15 +355,12 @@ public class PluginCallback implements Handler.Callback {
             Intent stubIntent = (Intent) FieldUtils.readField(obj, "intent");
             //ActivityInfo activityInfo = (ActivityInfo) FieldUtils.readField(obj, "activityInfo", true);
             stubIntent.setExtrasClassLoader(mHostContext.getClassLoader());
-
-            Intent targetIntent = stubIntent.getParcelableExtra(PluginConstant.EXTRA_TARGET_INTENT);
-
+            Intent targetIntent = stubIntent.getParcelableExtra(Env.EXTRA_TARGET_INTENT);
             // 这里多加一个isNotShortcutProxyActivity的判断，因为ShortcutProxyActivity的很特殊，启动它的时候，
             // 也会带上一个EXTRA_TARGET_INTENT的数据，就会导致这里误以为是启动插件Activity，所以这里要先做一个判断。
             // 之前ShortcutProxyActivity错误复用了key，但是为了兼容，所以这里就先这么判断吧。
             if (targetIntent != null && !isShortcutProxyActivity(stubIntent)) {
-                //TODO
-                //IPackageManagerHook.fixContextPackageManager(mHostContext);
+                IPackageManagerHook.fixContextPackageManager(mHostContext);
                 ComponentName targetComponentName = targetIntent.resolveActivity(mHostContext.getPackageManager());
                 ActivityInfo targetActivityInfo = PluginManager.getInstance().getActivityInfo(targetComponentName, 0);
                 if (targetActivityInfo != null) {
@@ -381,13 +381,13 @@ public class PluginCallback implements Handler.Callback {
 
                     boolean success = false;
                     try {
-                        targetIntent.putExtra(PluginConstant.EXTRA_TARGET_INFO, targetActivityInfo);
+                        targetIntent.putExtra(Env.EXTRA_TARGET_INFO, targetActivityInfo);
                         if (stubActivityInfo != null) {
-                            targetIntent.putExtra(PluginConstant.EXTRA_STUB_INFO, stubActivityInfo);
+                            targetIntent.putExtra(Env.EXTRA_STUB_INFO, stubActivityInfo);
                         }
                         success = true;
                     } catch (Exception e) {
-                        LogUtils.e(TAG, "putExtra 1 fail", e);
+                        Log.e(TAG, "putExtra 1 fail", e);
                     }
 
                     if (!success && Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
@@ -395,23 +395,23 @@ public class PluginCallback implements Handler.Callback {
                             ClassLoader oldParent = fixedClassLoader(pluginClassLoader);
                             targetIntent.putExtras(targetIntent.getExtras());
 
-                            targetIntent.putExtra(PluginConstant.EXTRA_TARGET_INFO, targetActivityInfo);
+                            targetIntent.putExtra(Env.EXTRA_TARGET_INFO, targetActivityInfo);
                             if (stubActivityInfo != null) {
-                                targetIntent.putExtra(PluginConstant.EXTRA_STUB_INFO, stubActivityInfo);
+                                targetIntent.putExtra(Env.EXTRA_STUB_INFO, stubActivityInfo);
                             }
                             fixedClassLoader(oldParent);
                             success = true;
                         } catch (Exception e) {
-                            LogUtils.e(TAG, "putExtra 2 fail", e);
+                            Log.e(TAG, "putExtra 2 fail", e);
                         }
                     }
 
                     if (!success) {
                         Intent newTargetIntent = new Intent();
                         newTargetIntent.setComponent(targetIntent.getComponent());
-                        newTargetIntent.putExtra(PluginConstant.EXTRA_TARGET_INFO, targetActivityInfo);
+                        newTargetIntent.putExtra(Env.EXTRA_TARGET_INFO, targetActivityInfo);
                         if (stubActivityInfo != null) {
-                            newTargetIntent.putExtra(PluginConstant.EXTRA_STUB_INFO, stubActivityInfo);
+                            newTargetIntent.putExtra(Env.EXTRA_STUB_INFO, stubActivityInfo);
                         }
                         FieldUtils.writeDeclaredField(msg.obj, "intent", newTargetIntent);
                     } else {
@@ -419,15 +419,15 @@ public class PluginCallback implements Handler.Callback {
                     }
                     FieldUtils.writeDeclaredField(msg.obj, "activityInfo", targetActivityInfo);
 
-                    LogUtils.i(TAG, "handleLaunchActivity OK");
+                    Log.i(TAG, "handleLaunchActivity OK");
                 } else {
-                    LogUtils.e(TAG, "handleLaunchActivity oldInfo==null");
+                    Log.e(TAG, "handleLaunchActivity oldInfo==null");
                 }
             } else {
-                LogUtils.e(TAG, "handleLaunchActivity targetIntent==null");
+                Log.e(TAG, "handleLaunchActivity targetIntent==null");
             }
         } catch (Exception e) {
-            LogUtils.e(TAG, "handleLaunchActivity FAIL", e);
+            Log.e(TAG, "handleLaunchActivity FAIL", e);
         }
 
         if (mCallback != null) {
@@ -438,24 +438,23 @@ public class PluginCallback implements Handler.Callback {
     }
 
     private boolean isShortcutProxyActivity(Intent targetIntent) {
-//        try {
-//            if (PluginManager.ACTION_SHORTCUT_PROXY.equalsIgnoreCase(targetIntent.getAction())) {
-//                return true;
-//            }
-//            PackageManager pm = mHostContext.getPackageManager();
-//            ResolveInfo info = pm.resolveActivity(targetIntent, 0);
-//            if (info != null) {
-//                String name = info.activityInfo.name;
-//                if (name != null && name.startsWith(".")) {
-//                    name = info.activityInfo.packageName + info.activityInfo.name;
-//                }
-//                return ShortcutProxyActivity.class.getName().equals(name);
-//            }
-//            return false;
-//        } catch (Exception e) {
-//            return false;
-//        }
-        return false;
+        try {
+            if (PluginManager.ACTION_SHORTCUT_PROXY.equalsIgnoreCase(targetIntent.getAction())) {
+                return true;
+            }
+            PackageManager pm = mHostContext.getPackageManager();
+            ResolveInfo info = pm.resolveActivity(targetIntent, 0);
+            if (info != null) {
+                String name = info.activityInfo.name;
+                if (name != null && name.startsWith(".")) {
+                    name = info.activityInfo.packageName + info.activityInfo.name;
+                }
+                return ShortcutProxyActivity.class.getName().equals(name);
+            }
+            return false;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     private ClassLoader fixedClassLoader(ClassLoader newParent) {

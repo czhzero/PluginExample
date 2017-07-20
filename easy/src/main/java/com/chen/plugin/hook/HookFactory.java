@@ -27,13 +27,30 @@ import android.content.Context;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 
-import com.chen.easyplugin.utils.LogUtils;
+
+import com.chen.plugin.helper.Log;
+import com.chen.plugin.hook.binder.IAudioServiceBinderHook;
+import com.chen.plugin.hook.binder.IClipboardBinderHook;
+import com.chen.plugin.hook.binder.IContentServiceBinderHook;
+import com.chen.plugin.hook.binder.IGraphicsStatsBinderHook;
+import com.chen.plugin.hook.binder.IInputMethodManagerBinderHook;
+import com.chen.plugin.hook.binder.ILocationManagerBinderHook;
+import com.chen.plugin.hook.binder.IMediaRouterServiceBinderHook;
+import com.chen.plugin.hook.binder.IMountServiceBinderHook;
+import com.chen.plugin.hook.binder.INotificationManagerBinderHook;
+import com.chen.plugin.hook.binder.ISearchManagerBinderHook;
+import com.chen.plugin.hook.binder.ISessionManagerBinderHook;
+import com.chen.plugin.hook.binder.IWifiManagerBinderHook;
+import com.chen.plugin.hook.binder.IWindowManagerBinderHook;
 import com.chen.plugin.hook.proxy.IActivityManagerHook;
+import com.chen.plugin.hook.proxy.IPackageManagerHook;
+import com.chen.plugin.hook.proxy.InstrumentationHook;
+import com.chen.plugin.hook.proxy.LibCoreHook;
 import com.chen.plugin.hook.proxy.PluginCallbackHook;
+import com.chen.plugin.hook.xhook.SQLiteDatabaseHook;
 
 import java.util.ArrayList;
 import java.util.List;
-
 
 /**
  * Created by Andy Zhang(zhangyong232@gmail.com) on 2015/3/2.
@@ -56,11 +73,11 @@ public class HookFactory {
     }
 
 
-    private List<BaseHook> mHookList = new ArrayList<BaseHook>(3);
+    private List<Hook> mHookList = new ArrayList<Hook>(3);
 
     public void setHookEnable(boolean enable) {
         synchronized (mHookList) {
-            for (BaseHook hook : mHookList) {
+            for (Hook hook : mHookList) {
                 hook.setEnable(enable);
             }
         }
@@ -68,7 +85,7 @@ public class HookFactory {
 
     public void setHookEnable(boolean enable, boolean reinstallHook) {
         synchronized (mHookList) {
-            for (BaseHook hook : mHookList) {
+            for (Hook hook : mHookList) {
                 hook.setEnable(enable, reinstallHook);
             }
         }
@@ -76,7 +93,7 @@ public class HookFactory {
 
     public void setHookEnable(Class hookClass, boolean enable) {
         synchronized (mHookList) {
-            for (BaseHook hook : mHookList) {
+            for (Hook hook : mHookList) {
                 if (hookClass.isInstance(hook)) {
                     hook.setEnable(enable);
                 }
@@ -84,64 +101,60 @@ public class HookFactory {
         }
     }
 
-    public void installHook(BaseHook hook, ClassLoader cl) {
+    public void installHook(Hook hook, ClassLoader cl) {
         try {
             hook.onInstall(cl);
             synchronized (mHookList) {
                 mHookList.add(hook);
             }
         } catch (Throwable throwable) {
-            LogUtils.e(TAG, "installHook %s error", throwable, hook);
+            Log.e(TAG, "installHook %s error", throwable, hook);
         }
     }
 
 
     public final void installHook(Context context, ClassLoader classLoader) throws Throwable {
-
-
-        //installHook(new IPackageManagerHook(context), classLoader);
-        installHook(new IActivityManagerHook(context), classLoader);
-
-//        installHook(new IClipboardBinderHook(context), classLoader);
-//        //for ISearchManager
-//        installHook(new ISearchManagerBinderHook(context), classLoader);
-//        //for INotificationManager
-//        installHook(new INotificationManagerBinderHook(context), classLoader);
-//        installHook(new IMountServiceBinder(context), classLoader);
-//        installHook(new IAudioServiceBinderHook(context), classLoader);
-//        installHook(new IContentServiceBinderHook(context), classLoader);
-//        installHook(new IWindowManagerBinderHook(context), classLoader);
-//        if (VERSION.SDK_INT > VERSION_CODES.LOLLIPOP_MR1) {
-//            installHook(new IGraphicsStatsBinderHook(context), classLoader);
-//        }
-////        if (VERSION.SDK_INT >= VERSION_CODES.KITKAT) {
-////            installHook(new WebViewFactoryProviderHook(context), classLoader);
-////        }
+        installHook(new IClipboardBinderHook(context), classLoader);
+        //for ISearchManager
+        installHook(new ISearchManagerBinderHook(context), classLoader);
+        //for INotificationManager
+        installHook(new INotificationManagerBinderHook(context), classLoader);
+        installHook(new IMountServiceBinderHook(context), classLoader);
+        installHook(new IAudioServiceBinderHook(context), classLoader);
+        installHook(new IContentServiceBinderHook(context), classLoader);
+        installHook(new IWindowManagerBinderHook(context), classLoader);
+        if (VERSION.SDK_INT > VERSION_CODES.LOLLIPOP_MR1) {
+            installHook(new IGraphicsStatsBinderHook(context), classLoader);
+        }
 //        if (VERSION.SDK_INT >= VERSION_CODES.KITKAT) {
-//            installHook(new IMediaRouterServiceBinderHook(context), classLoader);
+//            installHook(new WebViewFactoryProviderHook(context), classLoader);
 //        }
-//        if (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) {
-//            installHook(new ISessionManagerBinderHook(context), classLoader);
-//        }
-//        if (VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN_MR2) {
-//            installHook(new IWifiManagerBinderHook(context), classLoader);
-//        }
-//
-//        if (VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN_MR2) {
-//            installHook(new IInputMethodManagerBinderHook(context), classLoader);
-//        }
-//        if (VERSION.SDK_INT >= VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
-//            installHook(new ILocationManagerBinderHook(context), classLoader);
-//        }
-//
+        if (VERSION.SDK_INT >= VERSION_CODES.KITKAT) {
+            installHook(new IMediaRouterServiceBinderHook(context), classLoader);
+        }
+        if (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) {
+            installHook(new ISessionManagerBinderHook(context), classLoader);
+        }
+        if (VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN_MR2) {
+            installHook(new IWifiManagerBinderHook(context), classLoader);
+        }
+
+        if (VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN_MR2) {
+            installHook(new IInputMethodManagerBinderHook(context), classLoader);
+        }
+        if (VERSION.SDK_INT >= VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
+            installHook(new ILocationManagerBinderHook(context), classLoader);
+        }
+        installHook(new IPackageManagerHook(context), classLoader);
+        installHook(new IActivityManagerHook(context), classLoader);
         installHook(new PluginCallbackHook(context), classLoader);
-//        installHook(new InstrumentationHook(context), classLoader);
-//        installHook(new LibCoreHook(context), classLoader);
-//
-//        installHook(new SQLiteDatabaseHook(context), classLoader);
+        installHook(new InstrumentationHook(context), classLoader);
+        installHook(new LibCoreHook(context), classLoader);
+
+        installHook(new SQLiteDatabaseHook(context), classLoader);
     }
 
     public final void onCallApplicationOnCreate(Context context, Application app) {
-//        installHook(new SQLiteDatabaseHook(context), app.getClassLoader());
+        installHook(new SQLiteDatabaseHook(context), app.getClassLoader());
     }
 }

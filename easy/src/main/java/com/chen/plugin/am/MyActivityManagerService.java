@@ -33,12 +33,13 @@ import android.os.RemoteException;
 import android.text.TextUtils;
 
 
-import com.chen.easyplugin.utils.LogUtils;
 import com.chen.plugin.aidl.IApplicationCallback;
-import com.chen.plugin.pm.PluginManagerServiceImpl;
+import com.chen.plugin.helper.AttributeCache;
+import com.chen.plugin.helper.Log;
+import com.chen.plugin.helper.Utils;
+import com.chen.plugin.pm.IPluginManagerImpl;
 import com.chen.plugin.reflect.FieldUtils;
-import com.chen.plugin.utils.AttributeCache;
-import com.chen.plugin.utils.Utils;
+import com.chen.plugin.stub.AbstractServiceStub;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -67,7 +68,7 @@ public class MyActivityManagerService extends BaseActivityManagerService {
     }
 
     @Override
-    public void onCreate(PluginManagerServiceImpl pluginManagerImpl) throws Exception {
+    public void onCreate(IPluginManagerImpl pluginManagerImpl) throws Exception {
         super.onCreate(pluginManagerImpl);
         AttributeCache.init(mHostContext);
         mStaticProcessList.onCreate(mHostContext);
@@ -306,7 +307,7 @@ public class MyActivityManagerService extends BaseActivityManagerService {
                 Window_windowShowWallpaper = ent.array.getBoolean(R_Styleable_Window_windowShowWallpaper, false);
             }
         } catch (Throwable e) {
-            LogUtils.e(TAG, "error on read com.android.internal.R$styleable", e);
+            Log.e(TAG, "error on read com.android.internal.R$styleable", e);
         }
 
         boolean useDialogStyle = Window_windowIsTranslucent || Window_windowIsFloating || Window_windowShowWallpaper;
@@ -449,11 +450,11 @@ public class MyActivityManagerService extends BaseActivityManagerService {
         int providerCount = mRunningProcessList.getProviderCountByPid(myInfo.pid);
         if (activityCount <= 0 && serviceCount <= 0 && providerCount <= 0) {
             //杀死空进程。
-            LogUtils.i(TAG, "doGc kill process(pid=%s,uid=%s processName=%s)", myInfo.pid, myInfo.uid, myInfo.processName);
+            Log.i(TAG, "doGc kill process(pid=%s,uid=%s processName=%s)", myInfo.pid, myInfo.uid, myInfo.processName);
             try {
                 android.os.Process.killProcess(myInfo.pid);
             } catch (Throwable e) {
-                LogUtils.e(TAG, "error on killProcess", e);
+                Log.e(TAG, "error on killProcess", e);
             }
         } else if (activityCount <= 0 && serviceCount > 0 /*&& !mRunningProcessList.isPersistentApplication(myInfo.pid)*/) {
             List<String> names = mRunningProcessList.getStubServiceByPid(myInfo.pid);
@@ -461,9 +462,8 @@ public class MyActivityManagerService extends BaseActivityManagerService {
                 for (String name : names) {
                     Intent service = new Intent();
                     service.setClassName(mHostContext.getPackageName(), name);
-                    //TODO 临时注释掉
-                    //AbstractServiceStub.startKillService(mHostContext, service);
-                    LogUtils.i(TAG, "doGc kill process(pid=%s,uid=%s processName=%s) service=%s", myInfo.pid, myInfo.uid, myInfo.processName, service);
+                    AbstractServiceStub.startKillService(mHostContext, service);
+                    Log.i(TAG, "doGc kill process(pid=%s,uid=%s processName=%s) service=%s", myInfo.pid, myInfo.uid, myInfo.processName, service);
                 }
             }
         }

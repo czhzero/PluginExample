@@ -54,27 +54,29 @@ public class IntentMatcher {
                 public int compare(ResolveInfo r1, ResolveInfo r2) {
                     int v1 = r1.priority;
                     int v2 = r2.priority;
+                    //System.out.println("Comparing: q1=" + q1 + " q2=" + q2);
                     if (v1 != v2) {
                         return (v1 > v2) ? -1 : 1;
                     }
-
                     v1 = r1.preferredOrder;
                     v2 = r2.preferredOrder;
                     if (v1 != v2) {
                         return (v1 > v2) ? -1 : 1;
                     }
-
                     if (r1.isDefault != r2.isDefault) {
                         return r1.isDefault ? -1 : 1;
                     }
-
                     v1 = r1.match;
                     v2 = r2.match;
-
+                    //System.out.println("Comparing: m1=" + m1 + " m2=" + m2);
                     if (v1 != v2) {
                         return (v1 > v2) ? -1 : 1;
                     }
-
+//                    if (VERSION.SDK_INT >= VERSION_CODES.ICE_CREAM_SANDWICH) {
+//                        if (r1.system != r2.system) {
+//                            return r1.system ? -1 : 1;
+//                        }
+//                    }
                     return 0;
                 }
             };
@@ -90,6 +92,7 @@ public class IntentMatcher {
                 if (intent.getSelector() != null) {
                     intent = intent.getSelector();
                     comp = intent.getComponent();
+
                 }
             }
         }
@@ -127,6 +130,7 @@ public class IntentMatcher {
         Collections.sort(list, mResolvePrioritySorter);
         return list;
     }
+
 
     public static final List<ResolveInfo> resolveServiceIntent(Context context, Map<String, PluginPackageParser> pluginPackages, Intent intent, String resolvedType, int flags) throws Exception {
         if (intent == null || context == null) {
@@ -179,6 +183,7 @@ public class IntentMatcher {
         return list;
     }
 
+
     public static final List<ResolveInfo> resolveProviderIntent(Context context, Map<String, PluginPackageParser> pluginPackages, Intent intent, String resolvedType, int flags) throws Exception {
         if (intent == null || context == null) {
             return null;
@@ -228,6 +233,7 @@ public class IntentMatcher {
         Collections.sort(list, mResolvePrioritySorter);
         return list;
     }
+
 
     public static final List<ResolveInfo> resolveActivityIntent(Context context, Map<String, PluginPackageParser> pluginPackages, Intent intent, String resolvedType, int flags) throws Exception {
         if (intent == null || context == null) {

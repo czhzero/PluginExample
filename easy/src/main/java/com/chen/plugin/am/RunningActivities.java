@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 
 
-import com.chen.plugin.core.PluginConstant;
+import com.chen.plugin.pm.PluginManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,13 +21,15 @@ import java.util.Map;
 public class RunningActivities {
 
     private static final String TAG = RunningActivities.class.getSimpleName();
-
     private static Map<Activity, RunningActivityRecord> mRunningActivityList = new HashMap<>();
     private static Map<Integer, RunningActivityRecord> mRunningSingleStandardActivityList = new HashMap<>();
     private static Map<Integer, RunningActivityRecord> mRunningSingleTopActivityList = new HashMap<>();
     private static Map<Integer, RunningActivityRecord> mRunningSingleTaskActivityList = new HashMap<>();
     private static Map<Integer, RunningActivityRecord> mRunningSingleInstanceActivityList = new HashMap<>();
 
+    public static void onActivtyOnNewIntent(Activity activity, ActivityInfo targetInfo, ActivityInfo stubInfo, Intent intent) {
+        //TODO
+    }
 
 
     private static class RunningActivityRecord {
@@ -86,18 +88,14 @@ public class RunningActivities {
                 if (record.stubActivityInfo.launchMode == ActivityInfo.LAUNCH_MULTIPLE) {
                     continue;
                 } else if (record.stubActivityInfo.launchMode == ActivityInfo.LAUNCH_SINGLE_TOP) {
-                    doFinishIt(mRunningSingleTopActivityList);
+                    doFinshIt(mRunningSingleTopActivityList);
                 } else if (record.stubActivityInfo.launchMode == ActivityInfo.LAUNCH_SINGLE_TASK) {
-                    doFinishIt(mRunningSingleTopActivityList);
+                    doFinshIt(mRunningSingleTopActivityList);
                 } else if (record.stubActivityInfo.launchMode == ActivityInfo.LAUNCH_SINGLE_INSTANCE) {
-                    doFinishIt(mRunningSingleTopActivityList);
+                    doFinshIt(mRunningSingleTopActivityList);
                 }
             }
         }
-    }
-
-    public static void onActivtyOnNewIntent(Activity activity, ActivityInfo targetInfo, ActivityInfo stubInfo, Intent intent) {
-        //TODO
     }
 
     private static final Comparator<RunningActivityRecord> sRunningActivityRecordComparator = new Comparator<RunningActivityRecord>() {
@@ -121,15 +119,25 @@ public class RunningActivities {
         }
     };
 
-    private static void doFinishIt(Map<Integer, RunningActivityRecord> runningActivityList) {
-
-        if (runningActivityList != null && runningActivityList.size() >= PluginConstant.STUB_NO_ACTIVITY_MAX_NUM - 1) {
+    private static void doFinshIt(Map<Integer, RunningActivityRecord> runningActivityList) {
+        if (runningActivityList != null && runningActivityList.size() >= PluginManager.STUB_NO_ACTIVITY_MAX_NUM - 1) {
             List<RunningActivityRecord> activitys = new ArrayList<>(runningActivityList.size());
             activitys.addAll(runningActivityList.values());
             Collections.sort(activitys, sRunningActivityRecordComparator);
             RunningActivityRecord record = activitys.get(0);
             if (record.activity != null && !record.activity.isFinishing()) {
                 record.activity.finish();
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                    record.activity.finishAndRemoveTask();
+//                    record.activity.releaseInstance();
+//                } else {
+//                    record.activity.finish();
+//                }
+//
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+//                    record.activity.finishAffinity();
+//                }
+//                Log.d(TAG, "ZYActivity.finish stub=%s target=%s", record.stubActivityInfo, record.targetActivityInfo);
             }
         }
 

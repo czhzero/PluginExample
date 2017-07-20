@@ -1,4 +1,27 @@
+/*
+**        DroidPlugin Project
+**
+** Copyright(c) 2015 Andy Zhang <zhangyong232@gmail.com>
+**
+** This file is part of DroidPlugin.
+**
+** DroidPlugin is free software: you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation, either
+** version 3 of the License, or (at your option) any later version.
+**
+** DroidPlugin is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with DroidPlugin.  If not, see <http://www.gnu.org/licenses/lgpl.txt>
+**
+**/
+
 package com.chen.plugin.pm;
+
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -9,6 +32,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.PermissionGroupInfo;
 import android.content.pm.PermissionInfo;
 import android.content.pm.ProviderInfo;
@@ -19,11 +43,13 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.text.TextUtils;
 
-import com.chen.plugin.reflect.MethodUtils;
-import com.chen.easyplugin.utils.LogUtils;
+
+import com.chen.plugin.PluginManagerService;
 import com.chen.plugin.aidl.IApplicationCallback;
 import com.chen.plugin.aidl.IPackageDataObserver;
 import com.chen.plugin.aidl.IPluginManagerService;
+import com.chen.plugin.reflect.MethodUtils;
+import com.chen.plugin.helper.Log;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -32,9 +58,9 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Created by chenzhaohua on 17/5/18.
- * <p>
- * PluginManagerService 实现
+ * 插件包管理服务的客户端实现。
+ * <p/>
+ * Code by Andy Zhang (zhangyong232@gmail.com) on  2015/2/11.
  */
 public class PluginManager implements ServiceConnection {
 
@@ -57,30 +83,25 @@ public class PluginManager implements ServiceConnection {
     public static final int INSTALL_FAILED_NO_REQUESTEDPERMISSION = -100001;
     public static final int STUB_NO_ACTIVITY_MAX_NUM = 4;
 
+
     private static final String TAG = PluginManager.class.getSimpleName();
 
 
     private Context mHostContext;
     private static PluginManager sInstance = null;
-    private IPluginManagerService mPluginManager;
-    private Object mWaitLock = new Object();
 
     private List<WeakReference<ServiceConnection>> sServiceConnection = Collections.synchronizedList(new ArrayList<WeakReference<ServiceConnection>>(1));
 
-
     @Override
     public void onServiceConnected(final ComponentName componentName, final IBinder iBinder) {
-
         mPluginManager = IPluginManagerService.Stub.asInterface(iBinder);
-
         new Thread() {
             @Override
             public void run() {
                 try {
-
                     mPluginManager.waitForReady();
-
                     mPluginManager.registerApplicationCallback(new IApplicationCallback.Stub() {
+
                         @Override
                         public Bundle onCallback(Bundle extra) throws RemoteException {
                             return extra;
@@ -105,30 +126,26 @@ public class PluginManager implements ServiceConnection {
                         }
                     }, 0);
 
-                    LogUtils.i(TAG, "PluginManager ready!");
+                    Log.i(TAG, "PluginManager ready!");
                 } catch (Throwable e) {
-                    LogUtils.e(TAG, "Lost the mPluginManager connect...", e);
+                    Log.e(TAG, "Lost the mPluginManager connect...", e);
                 } finally {
                     try {
                         synchronized (mWaitLock) {
                             mWaitLock.notifyAll();
                         }
                     } catch (Exception e) {
-                        LogUtils.i(TAG, "PluginManager notifyAll:" + e.getMessage());
+                        Log.i(TAG, "PluginManager notifyAll:" + e.getMessage());
                     }
                 }
             }
         }.start();
-
-        LogUtils.i(TAG, "onServiceConnected connected OK!");
+        Log.i(TAG, "onServiceConnected connected OK!");
     }
-
 
     @Override
     public void onServiceDisconnected(ComponentName componentName) {
-
-        LogUtils.i(TAG, "onServiceDisconnected disconnected!");
-
+        Log.i(TAG, "onServiceDisconnected disconnected!");
         mPluginManager = null;
 
         Iterator<WeakReference<ServiceConnection>> iterator = sServiceConnection.iterator();
@@ -141,12 +158,11 @@ public class PluginManager implements ServiceConnection {
                 iterator.remove();
             }
         }
-
         //服务连接断开，需要重新连接。
         connectToService();
     }
 
-
+    private Object mWaitLock = new Object();
 
     public void waitForConnected() {
         if (isConnected()) {
@@ -157,9 +173,9 @@ public class PluginManager implements ServiceConnection {
                     mWaitLock.wait();
                 }
             } catch (InterruptedException e) {
-                LogUtils.i(TAG, "waitForConnected:" + e.getMessage());
+                Log.i(TAG, "waitForConnected:" + e.getMessage());
             }
-            LogUtils.i(TAG, "waitForConnected finish");
+            Log.i(TAG, "waitForConnected finish");
         }
     }
 
@@ -179,15 +195,17 @@ public class PluginManager implements ServiceConnection {
                         mWaitLock.wait(timeout);
                     }
                 } catch (InterruptedException e) {
-                    LogUtils.i(TAG, "waitForConnected:" + e.getMessage());
+                    Log.i(TAG, "waitForConnected:" + e.getMessage());
                 }
-                LogUtils.i(TAG, "waitForConnected finish");
+                Log.i(TAG, "waitForConnected finish");
             }
         } else {
             waitForConnected();
         }
     }
 
+
+    private IPluginManagerService mPluginManager;
 
     public void connectToService() {
         if (mPluginManager == null) {
@@ -197,11 +215,10 @@ public class PluginManager implements ServiceConnection {
                 mHostContext.startService(intent);
                 mHostContext.bindService(intent, this, Context.BIND_AUTO_CREATE);
             } catch (Exception e) {
-                LogUtils.e(TAG, "connectToService", e);
+                Log.e(TAG, "connectToService", e);
             }
         }
     }
-
 
     public void addServiceConnection(ServiceConnection sc) {
         sServiceConnection.add(new WeakReference<ServiceConnection>(sc));
@@ -238,9 +255,6 @@ public class PluginManager implements ServiceConnection {
         return sInstance;
     }
 
-
-
-
     //////////////////////////
     //  API
     //////////////////////////
@@ -249,12 +263,12 @@ public class PluginManager implements ServiceConnection {
             if (mPluginManager != null) {
                 return mPluginManager.getPackageInfo(packageName, flags);
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
             }
         } catch (RemoteException e) {
             throw e;
         } catch (Exception e) {
-            LogUtils.e(TAG, "getPackageInfo", e);
+            Log.e(TAG, "getPackageInfo", e);
         }
         return null;
     }
@@ -272,12 +286,12 @@ public class PluginManager implements ServiceConnection {
             if (mPluginManager != null && packageName != null) {
                 return mPluginManager.isPluginPackage(packageName);
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
             }
         } catch (RemoteException e) {
             throw e;
         } catch (Exception e) {
-            LogUtils.e(TAG, "isPluginPackage", e);
+            Log.e(TAG, "isPluginPackage", e);
         }
         return false;
     }
@@ -289,10 +303,7 @@ public class PluginManager implements ServiceConnection {
         return isPluginPackage(className.getPackageName());
     }
 
-
-
-
-    public ActivityInfo getActivityInfo(ComponentName className, int flags) throws PackageManager.NameNotFoundException, RemoteException {
+    public ActivityInfo getActivityInfo(ComponentName className, int flags) throws NameNotFoundException, RemoteException {
 
         try {
             if (className == null) {
@@ -301,19 +312,17 @@ public class PluginManager implements ServiceConnection {
             if (mPluginManager != null && className != null) {
                 return mPluginManager.getActivityInfo(className, flags);
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
             }
         } catch (RemoteException e) {
-            LogUtils.e(TAG, "getActivityInfo RemoteException", e);
+            Log.e(TAG, "getActivityInfo RemoteException", e);
         } catch (Exception e) {
-            LogUtils.e(TAG, "getActivityInfo", e);
+            Log.e(TAG, "getActivityInfo", e);
         }
         return null;
     }
 
-
-
-    public ActivityInfo getReceiverInfo(ComponentName className, int flags) throws PackageManager.NameNotFoundException, RemoteException {
+    public ActivityInfo getReceiverInfo(ComponentName className, int flags) throws NameNotFoundException, RemoteException {
         if (className == null) {
             return null;
         }
@@ -321,17 +330,17 @@ public class PluginManager implements ServiceConnection {
             if (mPluginManager != null && className != null) {
                 return mPluginManager.getReceiverInfo(className, flags);
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
             }
         } catch (RemoteException e) {
             throw e;
         } catch (Exception e) {
-            LogUtils.e(TAG, "getReceiverInfo", e);
+            Log.e(TAG, "getReceiverInfo", e);
         }
         return null;
     }
 
-    public ServiceInfo getServiceInfo(ComponentName className, int flags) throws PackageManager.NameNotFoundException, RemoteException {
+    public ServiceInfo getServiceInfo(ComponentName className, int flags) throws NameNotFoundException, RemoteException {
         if (className == null) {
             return null;
         }
@@ -339,17 +348,17 @@ public class PluginManager implements ServiceConnection {
             if (mPluginManager != null && className != null) {
                 return mPluginManager.getServiceInfo(className, flags);
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
             }
         } catch (RemoteException e) {
             throw e;
         } catch (Exception e) {
-            LogUtils.e(TAG, "getServiceInfo", e);
+            Log.e(TAG, "getServiceInfo", e);
         }
         return null;
     }
 
-    public ProviderInfo getProviderInfo(ComponentName className, int flags) throws PackageManager.NameNotFoundException, RemoteException {
+    public ProviderInfo getProviderInfo(ComponentName className, int flags) throws NameNotFoundException, RemoteException {
         if (className == null) {
             return null;
         }
@@ -357,12 +366,12 @@ public class PluginManager implements ServiceConnection {
             if (mPluginManager != null && className != null) {
                 return mPluginManager.getProviderInfo(className, flags);
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
             }
         } catch (RemoteException e) {
             throw e;
         } catch (Exception e) {
-            LogUtils.e(TAG, "getProviderInfo", e);
+            Log.e(TAG, "getProviderInfo", e);
         }
         return null;
     }
@@ -372,12 +381,12 @@ public class PluginManager implements ServiceConnection {
             if (mPluginManager != null && intent != null) {
                 return mPluginManager.resolveIntent(intent, resolvedType, flags);
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
             }
         } catch (RemoteException e) {
             throw e;
         } catch (Exception e) {
-            LogUtils.e(TAG, "resolveIntent", e);
+            Log.e(TAG, "resolveIntent", e);
         }
         return null;
     }
@@ -387,12 +396,12 @@ public class PluginManager implements ServiceConnection {
             if (mPluginManager != null && intent != null) {
                 return mPluginManager.resolveService(intent, resolvedType, flags);
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
             }
         } catch (RemoteException e) {
             throw e;
         } catch (Exception e) {
-            LogUtils.e(TAG, "resolveService", e);
+            Log.e(TAG, "resolveService", e);
         }
         return null;
     }
@@ -402,12 +411,12 @@ public class PluginManager implements ServiceConnection {
             if (mPluginManager != null && intent != null) {
                 return mPluginManager.queryIntentActivities(intent, resolvedType, flags);
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
             }
         } catch (RemoteException e) {
-            LogUtils.e(TAG, "queryIntentActivities RemoteException", e);
+            Log.e(TAG, "queryIntentActivities RemoteException", e);
         } catch (Exception e) {
-            LogUtils.e(TAG, "queryIntentActivities", e);
+            Log.e(TAG, "queryIntentActivities", e);
         }
         return null;
     }
@@ -417,12 +426,12 @@ public class PluginManager implements ServiceConnection {
             if (mPluginManager != null && intent != null) {
                 return mPluginManager.queryIntentReceivers(intent, resolvedType, flags);
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
             }
         } catch (RemoteException e) {
             throw e;
         } catch (Exception e) {
-            LogUtils.e(TAG, "queryIntentReceivers", e);
+            Log.e(TAG, "queryIntentReceivers", e);
         }
         return null;
     }
@@ -432,12 +441,12 @@ public class PluginManager implements ServiceConnection {
             if (mPluginManager != null && intent != null) {
                 return mPluginManager.queryIntentServices(intent, resolvedType, flags);
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
             }
         } catch (RemoteException e) {
-            LogUtils.e(TAG, "queryIntentServices RemoteException", e);
+            Log.e(TAG, "queryIntentServices RemoteException", e);
         } catch (Exception e) {
-            LogUtils.e(TAG, "queryIntentServices", e);
+            Log.e(TAG, "queryIntentServices", e);
         }
         return null;
     }
@@ -447,12 +456,12 @@ public class PluginManager implements ServiceConnection {
             if (mPluginManager != null && intent != null) {
                 return mPluginManager.queryIntentContentProviders(intent, resolvedType, flags);
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
             }
         } catch (RemoteException e) {
             throw e;
         } catch (Exception e) {
-            LogUtils.e(TAG, "queryIntentContentProviders", e);
+            Log.e(TAG, "queryIntentContentProviders", e);
         }
         return null;
     }
@@ -462,12 +471,12 @@ public class PluginManager implements ServiceConnection {
             if (mPluginManager != null) {
                 return mPluginManager.getInstalledPackages(flags);
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
             }
         } catch (RemoteException e) {
-            LogUtils.e(TAG, "getInstalledPackages RemoteException", e);
+            Log.e(TAG, "getInstalledPackages RemoteException", e);
         } catch (Exception e) {
-            LogUtils.e(TAG, "getInstalledPackages", e);
+            Log.e(TAG, "getInstalledPackages", e);
         }
         return null;
     }
@@ -478,12 +487,12 @@ public class PluginManager implements ServiceConnection {
             if (mPluginManager != null) {
                 return mPluginManager.getInstalledApplications(flags);
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
             }
         } catch (RemoteException e) {
             throw e;
         } catch (Exception e) {
-            LogUtils.e(TAG, "getInstalledApplications", e);
+            Log.e(TAG, "getInstalledApplications", e);
         }
         return null;
     }
@@ -493,12 +502,12 @@ public class PluginManager implements ServiceConnection {
             if (mPluginManager != null && name != null) {
                 return mPluginManager.getPermissionInfo(name, flags);
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
             }
         } catch (RemoteException e) {
             throw e;
         } catch (Exception e) {
-            LogUtils.e(TAG, "getPermissionInfo", e);
+            Log.e(TAG, "getPermissionInfo", e);
         }
         return null;
     }
@@ -508,12 +517,12 @@ public class PluginManager implements ServiceConnection {
             if (mPluginManager != null && group != null) {
                 return mPluginManager.queryPermissionsByGroup(group, flags);
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
             }
         } catch (RemoteException e) {
             throw e;
         } catch (Exception e) {
-            LogUtils.e(TAG, "queryPermissionsByGroup", e);
+            Log.e(TAG, "queryPermissionsByGroup", e);
         }
         return null;
     }
@@ -523,12 +532,12 @@ public class PluginManager implements ServiceConnection {
             if (mPluginManager != null && name != null) {
                 return mPluginManager.getPermissionGroupInfo(name, flags);
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
             }
         } catch (RemoteException e) {
             throw e;
         } catch (Exception e) {
-            LogUtils.e(TAG, "getPermissionGroupInfo", e);
+            Log.e(TAG, "getPermissionGroupInfo", e);
         }
         return null;
     }
@@ -538,12 +547,12 @@ public class PluginManager implements ServiceConnection {
             if (mPluginManager != null) {
                 return mPluginManager.getAllPermissionGroups(flags);
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
             }
         } catch (RemoteException e) {
             throw e;
         } catch (Exception e) {
-            LogUtils.e(TAG, "getAllPermissionGroups", e);
+            Log.e(TAG, "getAllPermissionGroups", e);
         }
         return null;
     }
@@ -553,12 +562,12 @@ public class PluginManager implements ServiceConnection {
             if (mPluginManager != null && name != null) {
                 return mPluginManager.resolveContentProvider(name, flags);
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
             }
         } catch (RemoteException e) {
             throw e;
         } catch (Exception e) {
-            LogUtils.e(TAG, "resolveContentProvider", e);
+            Log.e(TAG, "resolveContentProvider", e);
         }
         return null;
     }
@@ -582,12 +591,12 @@ public class PluginManager implements ServiceConnection {
                     }
                 });
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
             }
         } catch (RemoteException e) {
             throw e;
         } catch (Exception e) {
-            LogUtils.e(TAG, "deleteApplicationCacheFiles", e);
+            Log.e(TAG, "deleteApplicationCacheFiles", e);
         }
     }
 
@@ -610,12 +619,12 @@ public class PluginManager implements ServiceConnection {
                     }
                 });
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
             }
         } catch (RemoteException e) {
             throw e;
         } catch (Exception e) {
-            LogUtils.e(TAG, "clearApplicationUserData", e);
+            Log.e(TAG, "clearApplicationUserData", e);
         }
     }
 
@@ -624,12 +633,12 @@ public class PluginManager implements ServiceConnection {
             if (mPluginManager != null && packageName != null) {
                 return mPluginManager.getApplicationInfo(packageName, flags);
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
             }
         } catch (RemoteException e) {
-            LogUtils.e(TAG, "getApplicationInfo RemoteException", e);
+            Log.e(TAG, "getApplicationInfo RemoteException", e);
         } catch (Exception e) {
-            LogUtils.e(TAG, "getApplicationInfo", e);
+            Log.e(TAG, "getApplicationInfo", e);
         }
         return null;
     }
@@ -639,12 +648,12 @@ public class PluginManager implements ServiceConnection {
             if (mPluginManager != null) {
                 return mPluginManager.selectStubActivityInfo(pluginInfo);
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
             }
         } catch (RemoteException e) {
             throw e;
         } catch (Exception e) {
-            LogUtils.e(TAG, "selectStubActivityInfo", e);
+            Log.e(TAG, "selectStubActivityInfo", e);
         }
         return null;
     }
@@ -654,12 +663,12 @@ public class PluginManager implements ServiceConnection {
             if (mPluginManager != null) {
                 return mPluginManager.selectStubActivityInfoByIntent(pluginInfo);
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
             }
         } catch (RemoteException e) {
             throw e;
         } catch (Exception e) {
-            LogUtils.e(TAG, "selectStubActivityInfo", e);
+            Log.e(TAG, "selectStubActivityInfo", e);
         }
         return null;
     }
@@ -669,12 +678,12 @@ public class PluginManager implements ServiceConnection {
             if (mPluginManager != null) {
                 return mPluginManager.selectStubServiceInfo(pluginInfo);
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
             }
         } catch (RemoteException e) {
             throw e;
         } catch (Exception e) {
-            LogUtils.e(TAG, "selectStubServiceInfo", e);
+            Log.e(TAG, "selectStubServiceInfo", e);
         }
         return null;
     }
@@ -684,12 +693,12 @@ public class PluginManager implements ServiceConnection {
             if (mPluginManager != null) {
                 return mPluginManager.selectStubServiceInfoByIntent(pluginInfo);
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
             }
         } catch (RemoteException e) {
             throw e;
         } catch (Exception e) {
-            LogUtils.e(TAG, "selectStubServiceInfo", e);
+            Log.e(TAG, "selectStubServiceInfo", e);
         }
         return null;
     }
@@ -699,12 +708,12 @@ public class PluginManager implements ServiceConnection {
             if (mPluginManager != null) {
                 return mPluginManager.selectStubProviderInfo(name);
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
             }
         } catch (RemoteException e) {
             throw e;
         } catch (Exception e) {
-            LogUtils.e(TAG, "selectStubProviderInfo", e);
+            Log.e(TAG, "selectStubProviderInfo", e);
         }
         return null;
     }
@@ -721,13 +730,13 @@ public class PluginManager implements ServiceConnection {
                     }
                 }
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
             }
             return null;
         } catch (RemoteException e) {
             throw e;
         } catch (Exception e) {
-            LogUtils.e(TAG, "selectStubActivityInfo", e);
+            Log.e(TAG, "selectStubActivityInfo", e);
         }
         return null;
     }
@@ -744,13 +753,13 @@ public class PluginManager implements ServiceConnection {
                     }
                 }
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
             }
             return null;
         } catch (RemoteException e) {
             throw e;
         } catch (Exception e) {
-            LogUtils.e(TAG, "resolveServiceInfo", e);
+            Log.e(TAG, "resolveServiceInfo", e);
         }
         return null;
     }
@@ -760,12 +769,12 @@ public class PluginManager implements ServiceConnection {
             if (mPluginManager != null) {
                 mPluginManager.killBackgroundProcesses(packageName);
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
             }
         } catch (RemoteException e) {
             throw e;
         } catch (Exception e) {
-            LogUtils.e(TAG, "killBackgroundProcesses", e);
+            Log.e(TAG, "killBackgroundProcesses", e);
         }
     }
 
@@ -774,12 +783,12 @@ public class PluginManager implements ServiceConnection {
             if (mPluginManager != null) {
                 mPluginManager.forceStopPackage(packageName);
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
             }
         } catch (RemoteException e) {
             throw e;
         } catch (Exception e) {
-            LogUtils.e(TAG, "forceStopPackage", e);
+            Log.e(TAG, "forceStopPackage", e);
         }
 
     }
@@ -789,12 +798,12 @@ public class PluginManager implements ServiceConnection {
             if (mPluginManager != null) {
                 return mPluginManager.killApplicationProcess(packageName);
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
             }
         } catch (RemoteException e) {
             throw e;
         } catch (Exception e) {
-            LogUtils.e(TAG, "killApplicationProcess", e);
+            Log.e(TAG, "killApplicationProcess", e);
         }
         return false;
     }
@@ -804,12 +813,12 @@ public class PluginManager implements ServiceConnection {
             if (mPluginManager != null) {
                 return mPluginManager.getReceivers(packageName, flags);
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
             }
         } catch (RemoteException e) {
             throw e;
         } catch (Exception e) {
-            LogUtils.e(TAG, "getReceivers", e);
+            Log.e(TAG, "getReceivers", e);
         }
         return null;
     }
@@ -819,12 +828,12 @@ public class PluginManager implements ServiceConnection {
             if (mPluginManager != null) {
                 return mPluginManager.getReceiverIntentFilter(info);
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
             }
         } catch (RemoteException e) {
             throw e;
         } catch (Exception e) {
-            LogUtils.e(TAG, "getReceiverIntentFilter", e);
+            Log.e(TAG, "getReceiverIntentFilter", e);
         }
         return null;
     }
@@ -834,12 +843,12 @@ public class PluginManager implements ServiceConnection {
             if (mPluginManager != null) {
                 return mPluginManager.getTargetServiceInfo(info);
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
             }
         } catch (RemoteException e) {
             throw e;
         } catch (Exception e) {
-            LogUtils.e(TAG, "getTargetServiceInfo", e);
+            Log.e(TAG, "getTargetServiceInfo", e);
         }
         return null;
     }
@@ -848,15 +857,15 @@ public class PluginManager implements ServiceConnection {
         try {
             if (mPluginManager != null) {
                 int result = mPluginManager.installPackage(filepath, flags);
-                LogUtils.w(TAG, String.format("%s install result %d", filepath, result));
+                Log.w(TAG, String.format("%s install result %d", filepath, result));
                 return result;
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
             }
         } catch (RemoteException e) {
             throw e;
         } catch (Exception e) {
-            LogUtils.e(TAG, "forceStopPackage", e);
+            Log.e(TAG, "forceStopPackage", e);
         }
         return -1;
     }
@@ -866,12 +875,12 @@ public class PluginManager implements ServiceConnection {
             if (mPluginManager != null) {
                 return mPluginManager.getPackageNameByPid(pid);
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
             }
         } catch (RemoteException e) {
             throw e;
         } catch (Exception e) {
-            LogUtils.e(TAG, "forceStopPackage", e);
+            Log.e(TAG, "forceStopPackage", e);
         }
         return null;
     }
@@ -882,12 +891,12 @@ public class PluginManager implements ServiceConnection {
             if (mPluginManager != null) {
                 return mPluginManager.getProcessNameByPid(pid);
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
             }
         } catch (RemoteException e) {
             throw e;
         } catch (Exception e) {
-            LogUtils.e(TAG, "forceStopPackage", e);
+            Log.e(TAG, "forceStopPackage", e);
         }
         return null;
     }
@@ -897,12 +906,12 @@ public class PluginManager implements ServiceConnection {
             if (mPluginManager != null) {
                 mPluginManager.onActivityCreated(stubInfo, targetInfo);
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
             }
         } catch (RemoteException e) {
             throw e;
         } catch (Exception e) {
-            LogUtils.e(TAG, "onActivityCreated", e);
+            Log.e(TAG, "onActivityCreated", e);
         }
     }
 
@@ -911,12 +920,12 @@ public class PluginManager implements ServiceConnection {
             if (mPluginManager != null) {
                 mPluginManager.onActivityDestory(stubInfo, targetInfo);
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
             }
         } catch (RemoteException e) {
             throw e;
         } catch (Exception e) {
-            LogUtils.e(TAG, "onActivityDestory", e);
+            Log.e(TAG, "onActivityDestory", e);
         }
     }
 
@@ -925,12 +934,12 @@ public class PluginManager implements ServiceConnection {
             if (mPluginManager != null) {
                 mPluginManager.onServiceCreated(stubInfo, targetInfo);
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
             }
         } catch (RemoteException e) {
             throw e;
         } catch (Exception e) {
-            LogUtils.e(TAG, "onServiceCreated", e);
+            Log.e(TAG, "onServiceCreated", e);
         }
     }
 
@@ -940,10 +949,10 @@ public class PluginManager implements ServiceConnection {
             if (mPluginManager != null) {
                 mPluginManager.onServiceDestory(stubInfo, targetInfo);
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
             }
         } catch (Exception e) {
-            LogUtils.e(TAG, "onServiceDestory", e);
+            Log.e(TAG, "onServiceDestory", e);
         }
     }
 
@@ -952,12 +961,12 @@ public class PluginManager implements ServiceConnection {
             if (mPluginManager != null) {
                 mPluginManager.onProviderCreated(stubInfo, targetInfo);
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
             }
         } catch (RemoteException e) {
             throw e;
         } catch (Exception e) {
-            LogUtils.e(TAG, "onProviderCreated", e);
+            Log.e(TAG, "onProviderCreated", e);
         }
     }
 
@@ -966,12 +975,12 @@ public class PluginManager implements ServiceConnection {
             if (mPluginManager != null) {
                 mPluginManager.reportMyProcessName(stubProcessName, targetProcessName, targetPkg);
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
             }
         } catch (RemoteException e) {
             throw e;
         } catch (Exception e) {
-            LogUtils.e(TAG, "reportMyProcessName", e);
+            Log.e(TAG, "reportMyProcessName", e);
         }
     }
 
@@ -980,12 +989,12 @@ public class PluginManager implements ServiceConnection {
             if (mPluginManager != null) {
                 mPluginManager.deletePackage(packageName, flags);
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
             }
         } catch (RemoteException e) {
             throw e;
         } catch (Exception e) {
-            LogUtils.e(TAG, "deletePackage", e);
+            Log.e(TAG, "deletePackage", e);
         }
     }
 
@@ -995,13 +1004,13 @@ public class PluginManager implements ServiceConnection {
             if (mPluginManager != null) {
                 return mPluginManager.checkSignatures(pkg0, pkg1);
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
                 return PackageManager.SIGNATURE_NO_MATCH;
             }
         } catch (RemoteException e) {
             throw e;
         } catch (Exception e) {
-            LogUtils.e(TAG, "deletePackage", e);
+            Log.e(TAG, "deletePackage", e);
             return PackageManager.SIGNATURE_NO_MATCH;
         }
     }
@@ -1011,12 +1020,12 @@ public class PluginManager implements ServiceConnection {
             if (mPluginManager != null) {
                 mPluginManager.onActivtyOnNewIntent(stubInfo, targetInfo, intent);
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
             }
         } catch (RemoteException e) {
             throw e;
         } catch (Exception e) {
-            LogUtils.e(TAG, "onActivtyOnNewIntent", e);
+            Log.e(TAG, "onActivtyOnNewIntent", e);
         }
     }
 
@@ -1025,15 +1034,14 @@ public class PluginManager implements ServiceConnection {
             if (mPluginManager != null) {
                 return mPluginManager.getMyPid();
             } else {
-                LogUtils.w(TAG, "Plugin Package Manager Service not be connect");
+                Log.w(TAG, "Plugin Package Manager Service not be connect");
                 return -1;
             }
         } catch (RemoteException e) {
             throw e;
         } catch (Exception e) {
-            LogUtils.e(TAG, "getMyPid", e);
+            Log.e(TAG, "getMyPid", e);
             return -1;
         }
     }
-
 }

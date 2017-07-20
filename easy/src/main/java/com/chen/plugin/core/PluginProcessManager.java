@@ -43,16 +43,16 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 
-import com.chen.plugin.reflect.FieldUtils;
-import com.chen.plugin.reflect.MethodUtils;
-import com.chen.easyplugin.utils.LogUtils;
+import com.chen.plugin.helper.Log;
+import com.chen.plugin.helper.compat.ActivityThreadCompat;
+import com.chen.plugin.helper.compat.CompatibilityInfoCompat;
+import com.chen.plugin.helper.compat.ProcessCompat;
 import com.chen.plugin.hook.HookFactory;
 import com.chen.plugin.pm.PluginManager;
+import com.chen.plugin.reflect.FieldUtils;
+import com.chen.plugin.reflect.MethodUtils;
 import com.chen.plugin.stub.ActivityStub;
 import com.chen.plugin.stub.ServiceStub;
-import com.chen.plugin.utils.compat.ActivityThreadCompat;
-import com.chen.plugin.utils.compat.CompatibilityInfoCompat;
-import com.chen.plugin.utils.compat.ProcessCompat;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -76,7 +76,6 @@ public class PluginProcessManager {
     private static Object sGetCurrentProcessNameLock = new Object();
     private static Map<String, ClassLoader> sPluginClassLoaderCache = new WeakHashMap<String, ClassLoader>(1);
     private static Map<String, Object> sPluginLoadedApkCache = new WeakHashMap<String, Object>(1);
-    private static List<String> sProcessList = new ArrayList<>();
 
     public static String getCurrentProcessName(Context context) {
         if (context == null)
@@ -100,7 +99,7 @@ public class PluginProcessManager {
         return sCurrentProcessName;
     }
 
-
+    private static List<String> sProcessList = new ArrayList<>();
 
 
     private static void initProcessList(Context context) {
@@ -124,10 +123,9 @@ public class PluginProcessManager {
 
             if (packageInfo.providers != null) {
                 for (ProviderInfo info : packageInfo.providers) {
-                    //TODO
-//                    if (!sProcessList.contains(info.processName) && info.processName != null && info.authority != null && info.authority.indexOf(PluginConstant.STUB_AUTHORITY_NAME) < 0) {
-//                        sProcessList.add(info.processName);
-//                    }
+                    if (!sProcessList.contains(info.processName) && info.processName != null && info.authority != null && info.authority.indexOf(PluginManager.STUB_AUTHORITY_NAME) < 0) {
+                        sProcessList.add(info.processName);
+                    }
                 }
             }
 
@@ -252,7 +250,7 @@ public class PluginProcessManager {
                             try {
                                 MethodUtils.invokeMethod(loadedApk, "makeApplication", false, ActivityThreadCompat.getInstrumentation());
                             } catch (Exception e) {
-                                LogUtils.e(TAG, "preMakeApplication FAIL", e);
+                                Log.e(TAG, "preMakeApplication FAIL", e);
                             } finally {
                                 mExec.set(true);
                                 synchronized (lock) {
@@ -275,7 +273,7 @@ public class PluginProcessManager {
                 }
             }
         } catch (Exception e) {
-            LogUtils.e(TAG, "preMakeApplication FAIL", e);
+            Log.e(TAG, "preMakeApplication FAIL", e);
         }
     }
 
@@ -296,7 +294,7 @@ public class PluginProcessManager {
                             context.registerReceiver(receiver, filter);
                         }
                     } catch (Exception e) {
-                        LogUtils.e(TAG, "registerStaticReceiver error=%s", e, info.name);
+                        Log.e(TAG, "registerStaticReceiver error=%s", e, info.name);
                     }
                 }
             }
@@ -399,13 +397,13 @@ public class PluginProcessManager {
             try {
                 SYSTEM_SERVICE_MAP = FieldUtils.readStaticField(baseContext.getClass(), "SYSTEM_SERVICE_MAP");
             } catch (Exception e) {
-                LogUtils.e(TAG, "readStaticField(SYSTEM_SERVICE_MAP) from %s fail", e, baseContext.getClass());
+                Log.e(TAG, "readStaticField(SYSTEM_SERVICE_MAP) from %s fail", e, baseContext.getClass());
             }
             if (SYSTEM_SERVICE_MAP == null) {
                 try {
                     SYSTEM_SERVICE_MAP = FieldUtils.readStaticField(Class.forName("android.app.SystemServiceRegistry"), "SYSTEM_SERVICE_FETCHERS");
                 } catch (Exception e) {
-                    LogUtils.e(TAG, "readStaticField(SYSTEM_SERVICE_FETCHERS) from android.app.SystemServiceRegistry fail", e);
+                    Log.e(TAG, "readStaticField(SYSTEM_SERVICE_FETCHERS) from android.app.SystemServiceRegistry fail", e);
                 }
             }
 
@@ -431,12 +429,12 @@ public class PluginProcessManager {
                     } catch (InvocationTargetException e) {
                         Throwable cause = e.getCause();
                         if (cause != null) {
-                            LogUtils.w(TAG, "Fake system service faile", e);
+                            Log.w(TAG, "Fake system service faile", e);
                         } else {
-                            LogUtils.w(TAG, "Fake system service faile", e);
+                            Log.w(TAG, "Fake system service faile", e);
                         }
                     } catch (Exception e) {
-                        LogUtils.w(TAG, "Fake system service faile", e);
+                        Log.w(TAG, "Fake system service faile", e);
                     }
                 }
                 mServiceCache = FieldUtils.readField(originContext, "mServiceCache");
@@ -455,7 +453,7 @@ public class PluginProcessManager {
                 mFakedContext.put(baseContext.hashCode(), baseContext);
             }
         } catch (Exception e) {
-            LogUtils.e(TAG, "fakeSystemServiceOldAPI", e);
+            Log.e(TAG, "fakeSystemServiceOldAPI", e);
         }
     }
 
@@ -464,7 +462,7 @@ public class PluginProcessManager {
         if (VERSION.SDK_INT >= VERSION_CODES.ICE_CREAM_SANDWICH_MR1 && !TextUtils.equals(hostContext.getPackageName(), targetContext.getPackageName())) {
             long b = System.currentTimeMillis();
             fakeSystemServiceInner(hostContext, targetContext);
-            LogUtils.i(TAG, "Fake SystemService for originContext=%s context=%s,cost %s ms", targetContext.getPackageName(), targetContext.getPackageName(), (System.currentTimeMillis() - b));
+            Log.i(TAG, "Fake SystemService for originContext=%s context=%s,cost %s ms", targetContext.getPackageName(), targetContext.getPackageName(), (System.currentTimeMillis() - b));
         }
     }
 

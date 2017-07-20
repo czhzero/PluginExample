@@ -1,4 +1,27 @@
+/*
+**        DroidPlugin Project
+**
+** Copyright(c) 2015 Andy Zhang <zhangyong232@gmail.com>
+**
+** This file is part of DroidPlugin.
+**
+** DroidPlugin is free software: you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation, either
+** version 3 of the License, or (at your option) any later version.
+**
+** DroidPlugin is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with DroidPlugin.  If not, see <http://www.gnu.org/licenses/lgpl.txt>
+**
+**/
+
 package com.chen.plugin.reflect;
+
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -7,10 +30,10 @@ import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by chenzhaohua on 17/5/16.
- */
 
+/**
+ * Created by Andy Zhang(zhangyong232@gmail.com)ClassUtils on 2015/3/25.
+ */
 public class MethodUtils {
 
     private static Map<String, Method> sMethodCache = new HashMap<String, Method>();
@@ -301,5 +324,4 @@ public class MethodUtils {
         }
         return true;
     }
-
 }

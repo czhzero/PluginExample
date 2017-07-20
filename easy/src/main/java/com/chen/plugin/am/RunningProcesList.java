@@ -33,7 +33,8 @@ import android.content.pm.ServiceInfo;
 import android.os.RemoteException;
 import android.text.TextUtils;
 
-import com.chen.easyplugin.utils.LogUtils;
+
+import com.chen.plugin.helper.Log;
 import com.chen.plugin.pm.PluginManager;
 
 import java.text.Collator;
@@ -85,7 +86,7 @@ class RunningProcesList {
                         return processItem.stubProcessName;
                     }
                 } catch (Exception e) {
-                    LogUtils.e(TAG, "getStubProcessByTarget:error", e);
+                    Log.e(TAG, "getStubProcessByTarget:error", e);
                 }
             }
         }
@@ -141,19 +142,18 @@ class RunningProcesList {
     }
 
     private boolean isPersistentApp(String packageName) {
-        //TODO 临时注释
-//        try {
-//            PackageInfo info = mHostContext.getPackageManager().getPackageInfo(packageName, PackageManager.GET_META_DATA);
-//            if (info != null && info.applicationInfo.metaData != null && info.applicationInfo.metaData.containsKey(PluginManager.EXTRA_APP_PERSISTENT)) {
-//                if ((info.applicationInfo.flags & ApplicationInfo.FLAG_PERSISTENT) != 0) {
-//                    return true;
-//                }
-//                boolean isPersistentApp = info.applicationInfo.metaData.getBoolean(PluginManager.EXTRA_APP_PERSISTENT);
-//                return isPersistentApp;
-//            }
-//        } catch (Exception e) {
-//            LogUtils.e(TAG, "isPersistentApp:error", e);
-//        }
+        try {
+            PackageInfo info = mHostContext.getPackageManager().getPackageInfo(packageName, PackageManager.GET_META_DATA);
+            if (info != null && info.applicationInfo.metaData != null && info.applicationInfo.metaData.containsKey(PluginManager.EXTRA_APP_PERSISTENT)) {
+                if ((info.applicationInfo.flags & ApplicationInfo.FLAG_PERSISTENT) != 0) {
+                    return true;
+                }
+                boolean isPersistentApp = info.applicationInfo.metaData.getBoolean(PluginManager.EXTRA_APP_PERSISTENT);
+                return isPersistentApp;
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "isPersistentApp:error", e);
+        }
         return false;
     }
 
@@ -665,7 +665,7 @@ class RunningProcesList {
             sb.append("    ]\r\n");
         }
         sb.append("]  \r\n");
-        LogUtils.e(TAG, sb.toString());
+        Log.e(TAG, sb.toString());
 
 
     }

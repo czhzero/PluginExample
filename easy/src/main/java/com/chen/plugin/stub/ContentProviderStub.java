@@ -25,32 +25,32 @@ package com.chen.plugin.stub;
 /**
  * Created by Andy Zhang(zhangyong232@gmail.com) on 2015/2/12.
  */
-//public abstract class ContentProviderStub extends AbstractContentProviderStub {
-//
-//    public static class StubP00 extends ContentProviderStub {
-//    }
-//
-//    public static class StubP01 extends ContentProviderStub {
-//    }
-//
-//    public static class StubP02 extends ContentProviderStub {
-//    }
-//
-//    public static class StubP03 extends ContentProviderStub {
-//    }
-//
-//    public static class StubP04 extends ContentProviderStub {
-//    }
-//
-//    public static class StubP05 extends ContentProviderStub {
-//    }
-//
-//    public static class StubP06 extends ContentProviderStub {
-//    }
-//
-//    public static class StubP07 extends ContentProviderStub {
-//    }
-//
-//    public static class StubP08 extends ContentProviderStub {
-//    }
-//}
+public abstract class ContentProviderStub extends AbstractContentProviderStub {
+
+    public static class StubP00 extends ContentProviderStub {
+    }
+
+    public static class StubP01 extends ContentProviderStub {
+    }
+
+    public static class StubP02 extends ContentProviderStub {
+    }
+
+    public static class StubP03 extends ContentProviderStub {
+    }
+
+    public static class StubP04 extends ContentProviderStub {
+    }
+
+    public static class StubP05 extends ContentProviderStub {
+    }
+
+    public static class StubP06 extends ContentProviderStub {
+    }
+
+    public static class StubP07 extends ContentProviderStub {
+    }
+
+    public static class StubP08 extends ContentProviderStub {
+    }
+}

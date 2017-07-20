@@ -24,15 +24,15 @@ package com.chen.plugin.hook.proxy;
 
 import android.content.Context;
 import android.os.Handler;
-import android.util.Log;
 
 
-import com.chen.plugin.reflect.FieldUtils;
-import com.chen.easyplugin.utils.LogUtils;
-import com.chen.plugin.hook.BaseHook;
+import com.chen.plugin.helper.compat.ActivityThreadCompat;
 import com.chen.plugin.hook.BaseHookHandle;
+import com.chen.plugin.hook.Hook;
 import com.chen.plugin.hook.handle.PluginCallback;
-import com.chen.plugin.utils.compat.ActivityThreadCompat;
+import com.chen.plugin.reflect.FieldUtils;
+import com.chen.plugin.helper.Log;
+
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ import java.util.List;
 /**
  * Created by Andy Zhang(zhangyong232@gmail.com) on 2015/3/2.
  */
-public class PluginCallbackHook extends BaseHook {
+public class PluginCallbackHook extends Hook {
 
     private static final String TAG = PluginCallbackHook.class.getSimpleName();
     private List<PluginCallback> mCallbacks = new ArrayList<PluginCallback>(1);
@@ -61,7 +61,7 @@ public class PluginCallbackHook extends BaseHook {
             try {
                 onInstall(null);
             } catch (Throwable throwable) {
-                LogUtils.i(TAG, "setEnable onInstall fail", throwable);
+                Log.i(TAG, "setEnable onInstall fail", throwable);
             }
         }
 

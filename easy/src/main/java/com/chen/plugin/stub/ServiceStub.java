@@ -23,7 +23,7 @@ package com.chen.plugin.stub;
 /**
  * Created by Andy Zhang(zhangyong232@gmail.com) on 2015/2/9.
  */
-public abstract class ServiceStub  {
+public abstract class ServiceStub extends AbstractServiceStub {
 
 
     public abstract static class StubP00 extends ServiceStub {

@@ -37,7 +37,7 @@ import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 
 
-import com.chen.plugin.utils.compat.SystemPropertiesCompat;
+import com.chen.plugin.helper.compat.SystemPropertiesCompat;
 
 import java.io.File;
 import java.util.HashSet;

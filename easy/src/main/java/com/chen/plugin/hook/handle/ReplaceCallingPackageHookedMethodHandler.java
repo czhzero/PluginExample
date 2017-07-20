@@ -4,13 +4,12 @@ import android.content.Context;
 import android.os.Build;
 import android.os.RemoteException;
 
-
-import com.chen.easyplugin.pm.PluginManager;
-import com.chen.plugin.hook.HookedMethodHandler;
+import com.morgoo.droidplugin.hook.HookedMethodHandler;
+import com.chen.plugin.pm.PluginManager;
 
 import java.lang.reflect.Method;
 
-public class ReplaceCallingPackageHookedMethodHandler extends HookedMethodHandler {
+class ReplaceCallingPackageHookedMethodHandler extends HookedMethodHandler {
 
     public ReplaceCallingPackageHookedMethodHandler(Context hostContext) {
         super(hostContext);
@@ -34,6 +33,6 @@ public class ReplaceCallingPackageHookedMethodHandler extends HookedMethodHandle
     }
 
     private static boolean isPackagePlugin(String packageName) throws RemoteException {
-        return PluginManager.getInstance().getBundleByPackageName(packageName) != null;
+        return PluginManager.getInstance().isPluginPackage(packageName);
     }
 }

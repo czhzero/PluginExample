@@ -36,6 +36,7 @@ import android.text.TextUtils;
 
 
 import com.chen.plugin.stub.ActivityStub;
+import com.chen.plugin.stub.ContentProviderStub;
 
 import java.text.Collator;
 import java.util.ArrayList;
@@ -118,10 +119,9 @@ class StaticProcessList {
         PackageInfo packageInfo = pm.getPackageInfo(mHostContext.getPackageName(), PackageManager.GET_PROVIDERS);
         if (packageInfo.providers != null && packageInfo.providers.length > 0) {
             for (ProviderInfo providerInfo : packageInfo.providers) {
-                //TODO 临时注释
-//                if (providerInfo.name != null && providerInfo.name.startsWith(ContentProviderStub.class.getName())) {
-//                    addProviderInfo(providerInfo);
-//                }
+                if (providerInfo.name != null && providerInfo.name.startsWith(ContentProviderStub.class.getName())) {
+                    addProviderInfo(providerInfo);
+                }
             }
         }
 

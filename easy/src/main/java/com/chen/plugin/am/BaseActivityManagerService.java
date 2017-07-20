@@ -32,9 +32,9 @@ import android.os.RemoteCallbackList;
 import android.os.RemoteException;
 
 
-import com.chen.easyplugin.utils.LogUtils;
 import com.chen.plugin.aidl.IApplicationCallback;
-import com.chen.plugin.pm.PluginManagerServiceImpl;
+import com.chen.plugin.helper.Log;
+import com.chen.plugin.pm.IPluginManagerImpl;
 import com.chen.plugin.pm.parser.PluginPackageParser;
 
 import java.util.List;
@@ -69,7 +69,7 @@ public abstract class BaseActivityManagerService {
     public void onPkgInstalled(Map<String, PluginPackageParser> pluginCache, PluginPackageParser parser, String packageName) throws Exception {
     }
 
-    public void onCreate(PluginManagerServiceImpl pluginManagerImpl) throws Exception {
+    public void onCreate(IPluginManagerImpl pluginManagerImpl) throws Exception {
         if (mRemoteCallbackList == null) {
             mRemoteCallbackList = new MyRemoteCallbackList();
         }
@@ -109,7 +109,7 @@ public abstract class BaseActivityManagerService {
 
 
     protected void onProcessDied(int pid, int uid) {
-        LogUtils.i(TAG, "onProcessDied,pid=%s,uid=%s", pid, uid);
+        Log.i(TAG, "onProcessDied,pid=%s,uid=%s", pid, uid);
     }
 
     protected void sendCallBack(Bundle extra) {

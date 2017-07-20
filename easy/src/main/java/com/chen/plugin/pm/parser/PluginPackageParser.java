@@ -37,9 +37,11 @@ import android.content.pm.Signature;
 import android.os.Build;
 import android.text.TextUtils;
 
+
 import com.chen.plugin.core.PluginDirHelper;
+import com.chen.plugin.helper.ComponentNameComparator;
 import com.chen.plugin.reflect.FieldUtils;
-import com.chen.plugin.utils.ComponentNameComparator;
+
 
 import java.io.File;
 import java.util.ArrayList;
@@ -88,7 +90,6 @@ public class PluginPackageParser {
 
 
     public PluginPackageParser(Context hostContext, File pluginFile) throws Exception {
-
         mHostContext = hostContext;
         mPluginFile = pluginFile;
         mParser = PackageParser.newPluginParser(hostContext);
