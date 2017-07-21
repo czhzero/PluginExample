@@ -49,8 +49,8 @@ import android.os.Looper;
 import android.os.RemoteException;
 import android.text.TextUtils;
 
-import com.chen.plugin.PluginManagerService;
-import com.chen.plugin.PluginPatchManager;
+import com.chen.plugin.pm.PluginManagerService;
+import com.chen.plugin.pm.PluginPatchManager;
 import com.chen.plugin.aidl.IServiceConnection;
 import com.chen.plugin.am.RunningActivities;
 import com.chen.plugin.helper.MyProxy;

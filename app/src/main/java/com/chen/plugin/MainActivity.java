@@ -51,7 +51,6 @@ public class MainActivity extends Activity {
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(newBase);
 
-//        PluginApplication.applicationOnCreate(newBase);
 
 //        try {
 //            FrameworkHookHelper.hookActivityManagerNative();

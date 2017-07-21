@@ -44,7 +44,6 @@ import android.os.RemoteException;
 import android.text.TextUtils;
 
 
-import com.chen.plugin.PluginManagerService;
 import com.chen.plugin.aidl.IApplicationCallback;
 import com.chen.plugin.aidl.IPackageDataObserver;
 import com.chen.plugin.aidl.IPluginManagerService;

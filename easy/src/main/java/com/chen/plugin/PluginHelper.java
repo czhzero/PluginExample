@@ -1,25 +1,3 @@
-/*
-**        DroidPlugin Project
-**
-** Copyright(c) 2015 Andy Zhang <zhangyong232@gmail.com>
-**
-** This file is part of DroidPlugin.
-**
-** DroidPlugin is free software: you can redistribute it and/or
-** modify it under the terms of the GNU Lesser General Public
-** License as published by the Free Software Foundation, either
-** version 3 of the License, or (at your option) any later version.
-**
-** DroidPlugin is distributed in the hope that it will be useful,
-** but WITHOUT ANY WARRANTY; without even the implied warranty of
-** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Lesser General Public License for more details.
-**
-** You should have received a copy of the GNU Lesser General Public
-** License along with DroidPlugin.  If not, see <http://www.gnu.org/licenses/lgpl.txt>
-**
-**/
-
 package com.chen.plugin;
 
 import android.content.ComponentName;
@@ -29,21 +7,20 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.os.MessageQueue;
-
-
 import com.chen.plugin.core.PluginProcessManager;
 import com.chen.plugin.helper.compat.ActivityThreadCompat;
+import com.chen.plugin.pm.PluginCrashHandler;
 import com.chen.plugin.pm.PluginManager;
+import com.chen.plugin.pm.PluginPatchManager;
 import com.chen.plugin.reflect.FieldUtils;
 import com.chen.plugin.reflect.MethodUtils;
 import com.chen.plugin.helper.Log;
-
-
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
 /**
- * Created by Andy Zhang(zhangyong232@gmail.com)  on 2015/5/18.
+ * Created by chenzhaohua on 17-7-21.
+ * 插件初始化类
  */
 public class PluginHelper implements ServiceConnection {
 
@@ -54,6 +31,7 @@ public class PluginHelper implements ServiceConnection {
     private PluginHelper() {
     }
 
+
     public static final PluginHelper getInstance() {
         if (sInstance == null) {
             sInstance = new PluginHelper();
@@ -61,17 +39,16 @@ public class PluginHelper implements ServiceConnection {
         return sInstance;
     }
 
-    public void applicationOnCreate(final Context baseContext) {
-        mContext = baseContext;
-        initPlugin(baseContext);
-    }
 
-    private Context mContext;
-
-    private void initPlugin(Context baseContext) {
+    public void initPlugin(Context baseContext) {
 
         long b = System.currentTimeMillis();
+
         try {
+
+            //start crash handler
+            PluginCrashHandler.getInstance().register(baseContext);
+
             try {
                 fixMiUiLbeSecurity();
             } catch (Throwable e) {
@@ -96,7 +73,7 @@ public class PluginHelper implements ServiceConnection {
             }
 
             try {
-                PluginManager.getInstance().addServiceConnection(PluginHelper.this);
+                PluginManager.getInstance().addServiceConnection(getInstance());
                 PluginManager.getInstance().init(baseContext);
             } catch (Throwable e) {
                 Log.e(TAG, "installHook has error", e);
@@ -185,7 +162,4 @@ public class PluginHelper implements ServiceConnection {
     public void onServiceDisconnected(ComponentName componentName) {
     }
 
-    public void applicationAttachBaseContext(Context baseContext) {
-        MyCrashHandler.getInstance().register(baseContext);
-    }
 }

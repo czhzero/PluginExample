@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.chen.easyplugin">
+    package="com.chen.plugin">
 
     <application
         android:allowBackup="true"
@@ -7,9 +7,13 @@
         android:supportsRtl="true">
 
 
+        <service
+            android:name=".pm.PluginManagerService"
+            android:enabled="true" />
+
 
         <activity
-            android:name="com.chen.easyplugin.stub.ActivityStub$P00$Standard00"
+            android:name=".stub.ActivityStub$P00$Standard00"
             android:allowTaskReparenting="true"
             android:excludeFromRecents="true"
             android:exported="false"
@@ -21,7 +25,7 @@
 
 
         <activity
-            android:name="com.chen.easyplugin.stub.ActivityStub$P00$SingleTop00"
+            android:name=".stub.ActivityStub$P00$SingleTop00"
             android:allowTaskReparenting="true"
             android:excludeFromRecents="true"
             android:exported="false"
@@ -31,7 +35,7 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name="com.chen.easyplugin.stub.ActivityStub$P00$SingleTop01"
+            android:name=".stub.ActivityStub$P00$SingleTop01"
             android:allowTaskReparenting="true"
             android:excludeFromRecents="true"
             android:exported="false"
@@ -41,7 +45,7 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name="com.chen.easyplugin.stub.ActivityStub$P00$SingleTop02"
+            android:name=".stub.ActivityStub$P00$SingleTop02"
             android:allowTaskReparenting="true"
             android:excludeFromRecents="true"
             android:exported="false"
@@ -51,7 +55,7 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name="com.chen.easyplugin.stub.ActivityStub$P00$SingleTop03"
+            android:name=".stub.ActivityStub$P00$SingleTop03"
             android:allowTaskReparenting="true"
             android:excludeFromRecents="true"
             android:exported="false"
@@ -62,7 +66,7 @@
 
 
         <activity
-            android:name="com.chen.easyplugin.stub.ActivityStub$P00$SingleTask00"
+            android:name=".stub.ActivityStub$P00$SingleTask00"
             android:allowTaskReparenting="true"
             android:excludeFromRecents="true"
             android:exported="false"
@@ -72,7 +76,7 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name="com.chen.easyplugin.stub.ActivityStub$P00$SingleTask01"
+            android:name=".stub.ActivityStub$P00$SingleTask01"
             android:allowTaskReparenting="true"
             android:excludeFromRecents="true"
             android:exported="false"
@@ -82,7 +86,7 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name="com.chen.easyplugin.stub.ActivityStub$P00$SingleTask02"
+            android:name=".stub.ActivityStub$P00$SingleTask02"
             android:allowTaskReparenting="true"
             android:excludeFromRecents="true"
             android:exported="false"
@@ -92,7 +96,7 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name="com.chen.easyplugin.stub.ActivityStub$P00$SingleTask03"
+            android:name=".stub.ActivityStub$P00$SingleTask03"
             android:allowTaskReparenting="true"
             android:excludeFromRecents="true"
             android:exported="false"
@@ -103,7 +107,7 @@
 
 
         <activity
-            android:name="com.chen.easyplugin.stub.ActivityStub$P00$SingleInstance00"
+            android:name=".stub.ActivityStub$P00$SingleInstance00"
             android:allowTaskReparenting="true"
             android:excludeFromRecents="true"
             android:exported="false"
@@ -113,7 +117,7 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name="com.chen.easyplugin.stub.ActivityStub$P00$SingleInstance01"
+            android:name=".stub.ActivityStub$P00$SingleInstance01"
             android:allowTaskReparenting="true"
             android:excludeFromRecents="true"
             android:exported="false"
@@ -123,7 +127,7 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name="com.chen.easyplugin.stub.ActivityStub$P00$SingleInstance02"
+            android:name=".stub.ActivityStub$P00$SingleInstance02"
             android:allowTaskReparenting="true"
             android:excludeFromRecents="true"
             android:exported="false"
@@ -133,7 +137,7 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name="com.chen.easyplugin.stub.ActivityStub$P00$SingleInstance03"
+            android:name=".stub.ActivityStub$P00$SingleInstance03"
             android:allowTaskReparenting="true"
             android:excludeFromRecents="true"
             android:exported="false"
@@ -143,22 +147,10 @@
             android:screenOrientation="portrait" />
 
 
+        <service
+            android:name=".stub.ServiceStub$StubP00$P00"
+            android:enabled="true" />
 
-        <service
-            android:name="com.chen.easyplugin.stub.BundleServiceContainer$Proxy1"
-            android:enabled="true" />
-        <service
-            android:name="com.chen.easyplugin.stub.BundleServiceContainer$Proxy2"
-            android:enabled="true" />
-        <service
-            android:name="com.chen.easyplugin.stub.BundleServiceContainer$Proxy3"
-            android:enabled="true" />
-        <service
-            android:name="com.chen.easyplugin.stub.BundleServiceContainer$Proxy4"
-            android:enabled="true" />
-        <service
-            android:name="com.chen.easyplugin.stub.BundleServiceContainer$Proxy5"
-            android:enabled="true" />
 
 
     </application>

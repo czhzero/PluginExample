@@ -52,7 +52,7 @@ public class Log {
     private static final int ASSERT = android.util.Log.ASSERT;
     private static final long MAX_LOG_FILE = 1024 * 1024 * 8; //8MB
 
-    private static boolean sDebug = false;
+    private static boolean sDebug = true;
     private static boolean sFileLog = false;
     private static final SimpleDateFormat sFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
     private static final SimpleDateFormat sFormat1 = new SimpleDateFormat("yyyyMMdd");
