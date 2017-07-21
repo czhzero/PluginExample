@@ -26,13 +26,15 @@ import android.content.Context;
 import android.os.IBinder;
 import android.text.TextUtils;
 
-import com.morgoo.droidplugin.hook.BaseHookHandle;
-import com.morgoo.droidplugin.hook.Hook;
-import com.morgoo.droidplugin.hook.HookedMethodHandler;
+
+import com.chen.plugin.helper.MyProxy;
+import com.chen.plugin.helper.compat.ServiceManagerCompat;
+import com.chen.plugin.hook.BaseHookHandle;
+import com.chen.plugin.hook.Hook;
+import com.chen.plugin.hook.HookedMethodHandler;
 import com.chen.plugin.reflect.FieldUtils;
-import com.morgoo.droidplugin.reflect.Utils;
-import com.morgoo.helper.MyProxy;
-import com.morgoo.helper.compat.ServiceManagerCompat;
+import com.chen.plugin.reflect.Utils;
+
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;

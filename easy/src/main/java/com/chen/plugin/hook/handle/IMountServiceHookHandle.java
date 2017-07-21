@@ -27,8 +27,9 @@ import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.text.TextUtils;
 
-import com.morgoo.droidplugin.hook.BaseHookHandle;
-import com.morgoo.droidplugin.hook.HookedMethodHandler;
+
+import com.chen.plugin.hook.BaseHookHandle;
+import com.chen.plugin.hook.HookedMethodHandler;
 
 import java.lang.reflect.Method;
 

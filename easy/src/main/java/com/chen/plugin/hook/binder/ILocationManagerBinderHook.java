@@ -25,9 +25,10 @@ package com.chen.plugin.hook.binder;
 import android.content.Context;
 import android.os.IBinder;
 
-import com.morgoo.droidplugin.hook.BaseHookHandle;
-import com.morgoo.droidplugin.hook.handle.ILocationManagerHookHandle;
-import com.morgoo.helper.compat.ILocationManagerCompat;
+import com.chen.plugin.helper.compat.ILocationManagerCompat;
+import com.chen.plugin.hook.BaseHookHandle;
+import com.chen.plugin.hook.handle.ILocationManagerHookHandle;
+
 
 /**
  * Created by Andy Zhang(zhangyong232@gmail.com) on 2016/2/25.

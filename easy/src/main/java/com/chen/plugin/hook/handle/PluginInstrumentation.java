@@ -39,12 +39,13 @@ import android.os.Bundle;
 import android.os.RemoteException;
 import android.text.TextUtils;
 
-import com.morgoo.droidplugin.am.RunningActivities;
+
+import com.chen.plugin.am.RunningActivities;
 import com.chen.plugin.core.Env;
 import com.chen.plugin.core.PluginProcessManager;
-import com.morgoo.droidplugin.hook.HookFactory;
-import com.morgoo.droidplugin.hook.binder.IWindowManagerBinderHook;
-import com.morgoo.droidplugin.hook.proxy.IPackageManagerHook;
+import com.chen.plugin.hook.HookFactory;
+import com.chen.plugin.hook.binder.IWindowManagerBinderHook;
+import com.chen.plugin.hook.proxy.IPackageManagerHook;
 import com.chen.plugin.pm.PluginManager;
 import com.chen.plugin.reflect.FieldUtils;
 import com.chen.plugin.helper.Log;

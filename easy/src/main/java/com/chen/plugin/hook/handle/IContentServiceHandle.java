@@ -27,8 +27,8 @@ import android.content.pm.ProviderInfo;
 import android.net.Uri;
 
 import com.chen.plugin.core.Env;
-import com.morgoo.droidplugin.hook.BaseHookHandle;
-import com.morgoo.droidplugin.hook.HookedMethodHandler;
+import com.chen.plugin.hook.BaseHookHandle;
+import com.chen.plugin.hook.HookedMethodHandler;
 import com.chen.plugin.pm.PluginManager;
 import com.chen.plugin.helper.Log;
 

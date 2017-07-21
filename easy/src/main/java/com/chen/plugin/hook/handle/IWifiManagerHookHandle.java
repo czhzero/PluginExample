@@ -25,8 +25,9 @@ package com.chen.plugin.hook.handle;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.morgoo.droidplugin.hook.BaseHookHandle;
-import com.morgoo.droidplugin.hook.HookedMethodHandler;
+
+import com.chen.plugin.hook.BaseHookHandle;
+import com.chen.plugin.hook.HookedMethodHandler;
 import com.chen.plugin.pm.PluginManager;
 
 import java.lang.reflect.Method;

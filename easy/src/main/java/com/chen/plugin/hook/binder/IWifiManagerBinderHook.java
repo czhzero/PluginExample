@@ -25,12 +25,13 @@ package com.chen.plugin.hook.binder;
 import android.content.Context;
 import android.os.IBinder;
 
-import com.morgoo.droidplugin.hook.BaseHookHandle;
-import com.morgoo.droidplugin.hook.handle.IWifiManagerHookHandle;
+import com.chen.plugin.helper.compat.IWifiManagerCompat;
+import com.chen.plugin.helper.compat.ServiceManagerCompat;
+import com.chen.plugin.hook.BaseHookHandle;
+import com.chen.plugin.hook.handle.IWifiManagerHookHandle;
 import com.chen.plugin.reflect.FieldUtils;
 import com.chen.plugin.helper.Log;
-import com.morgoo.helper.compat.IWifiManagerCompat;
-import com.morgoo.helper.compat.ServiceManagerCompat;
+
 
 /**
  * Created by Andy Zhang(zhangyong232@gmail.com) on 2015/6/1.

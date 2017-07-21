@@ -25,8 +25,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 
-import com.morgoo.droidplugin.hook.BaseHookHandle;
-import com.morgoo.droidplugin.hook.HookedMethodHandler;
+import com.chen.plugin.hook.BaseHookHandle;
+import com.chen.plugin.hook.HookedMethodHandler;
 import com.chen.plugin.pm.PluginManager;
 
 import java.lang.reflect.Method;
@@ -45,7 +45,7 @@ public class ISearchManagerHookHandle extends BaseHookHandle {
 
     }
 
-    private class getSearchableInfo extends HookedMethodHandler{
+    private class getSearchableInfo extends HookedMethodHandler {
 
         public getSearchableInfo(Context hostContext) {
             super(hostContext);

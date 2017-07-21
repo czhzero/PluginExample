@@ -24,11 +24,12 @@ package com.chen.plugin.hook.handle;
 
 import android.content.Context;
 
-import com.morgoo.droidplugin.hook.BaseHookHandle;
-import com.morgoo.droidplugin.hook.HookedMethodHandler;
-import com.morgoo.droidplugin.hook.proxy.IWindowSessionHook;
-import com.morgoo.droidplugin.reflect.Utils;
-import com.morgoo.helper.MyProxy;
+
+import com.chen.plugin.helper.MyProxy;
+import com.chen.plugin.hook.BaseHookHandle;
+import com.chen.plugin.hook.HookedMethodHandler;
+import com.chen.plugin.hook.proxy.IWindowSessionHook;
+import com.chen.plugin.reflect.Utils;
 
 import java.lang.reflect.Method;
 import java.util.List;

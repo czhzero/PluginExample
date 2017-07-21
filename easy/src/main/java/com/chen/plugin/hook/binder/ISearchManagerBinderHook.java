@@ -24,9 +24,10 @@ package com.chen.plugin.hook.binder;
 import android.content.Context;
 import android.os.IBinder;
 
-import com.morgoo.droidplugin.hook.BaseHookHandle;
-import com.morgoo.droidplugin.hook.handle.ISearchManagerHookHandle;
-import com.morgoo.helper.compat.ISearchManagerCompat;
+import com.chen.plugin.helper.compat.ISearchManagerCompat;
+import com.chen.plugin.hook.BaseHookHandle;
+import com.chen.plugin.hook.handle.ISearchManagerHookHandle;
+
 
 /**
  * Created by wyw on 15-9-18.

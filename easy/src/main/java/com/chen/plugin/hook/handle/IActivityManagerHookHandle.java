@@ -25,7 +25,7 @@ package com.chen.plugin.hook.handle;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.app.IServiceConnection;
+
 import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
@@ -49,21 +49,29 @@ import android.os.Looper;
 import android.os.RemoteException;
 import android.text.TextUtils;
 
-import com.morgoo.droidplugin.PluginManagerService;
-import com.morgoo.droidplugin.PluginPatchManager;
-import com.morgoo.droidplugin.am.RunningActivities;
+import com.chen.plugin.PluginManagerService;
+import com.chen.plugin.PluginPatchManager;
+import com.chen.plugin.aidl.IServiceConnection;
+import com.chen.plugin.am.RunningActivities;
+import com.chen.plugin.helper.MyProxy;
+import com.chen.plugin.helper.compat.ActivityManagerCompat;
+import com.chen.plugin.helper.compat.ContentProviderHolderCompat;
+import com.chen.plugin.hook.BaseHookHandle;
+
 import com.chen.plugin.core.Env;
 import com.chen.plugin.core.PluginProcessManager;
-import com.morgoo.droidplugin.hook.BaseHookHandle;
-import com.morgoo.droidplugin.hook.proxy.IContentProviderHook;
+
+import com.chen.plugin.hook.proxy.IContentProviderHook;
 import com.chen.plugin.pm.PluginManager;
 import com.chen.plugin.reflect.FieldUtils;
 import com.chen.plugin.reflect.MethodUtils;
 
 import com.chen.plugin.helper.Log;
-import com.morgoo.helper.MyProxy;
-import com.morgoo.helper.compat.ActivityManagerCompat;
-import com.morgoo.helper.compat.ContentProviderHolderCompat;
+import com.chen.plugin.reflect.Utils;
+import com.chen.plugin.stub.MyFakeIBinder;
+import com.chen.plugin.stub.ServcesManager;
+import com.chen.plugin.stub.ShortcutProxyActivity;
+
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;

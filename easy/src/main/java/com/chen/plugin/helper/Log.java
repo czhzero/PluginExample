@@ -27,8 +27,9 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Process;
 
-import com.morgoo.droidplugin.hook.HookFactory;
-import com.morgoo.droidplugin.hook.proxy.LibCoreHook;
+
+import com.chen.plugin.hook.HookFactory;
+import com.chen.plugin.hook.proxy.LibCoreHook;
 
 import java.io.File;
 import java.io.FileWriter;

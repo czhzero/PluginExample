@@ -26,10 +26,11 @@ import android.content.Context;
 import android.os.IBinder;
 import android.view.inputmethod.InputMethodManager;
 
-import com.morgoo.droidplugin.hook.BaseHookHandle;
-import com.morgoo.droidplugin.hook.handle.IInputMethodManagerHookHandle;
+import com.chen.plugin.helper.compat.IInputMethodManagerCompat;
+import com.chen.plugin.hook.BaseHookHandle;
+import com.chen.plugin.hook.handle.IInputMethodManagerHookHandle;
 import com.chen.plugin.reflect.FieldUtils;
-import com.morgoo.helper.compat.IInputMethodManagerCompat;
+
 
 /**
  * Created by Andy Zhang(zhangyong232@gmail.com) on 2015/6/4.

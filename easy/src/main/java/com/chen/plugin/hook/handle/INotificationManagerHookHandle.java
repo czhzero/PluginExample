@@ -38,8 +38,8 @@ import android.view.View;
 import android.widget.RemoteViews;
 
 import com.chen.plugin.core.PluginProcessManager;
-import com.morgoo.droidplugin.hook.BaseHookHandle;
-import com.morgoo.droidplugin.hook.HookedMethodHandler;
+import com.chen.plugin.hook.BaseHookHandle;
+import com.chen.plugin.hook.HookedMethodHandler;
 import com.chen.plugin.pm.PluginManager;
 import com.chen.plugin.reflect.FieldUtils;
 import com.chen.plugin.helper.Log;

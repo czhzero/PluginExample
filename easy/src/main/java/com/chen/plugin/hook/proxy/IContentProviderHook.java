@@ -25,8 +25,9 @@ package com.chen.plugin.hook.proxy;
 import android.content.Context;
 import android.content.pm.ProviderInfo;
 
-import com.morgoo.droidplugin.hook.BaseHookHandle;
-import com.morgoo.droidplugin.hook.handle.IContentProviderInvokeHandle;
+import com.chen.plugin.hook.BaseHookHandle;
+import com.chen.plugin.hook.handle.IContentProviderInvokeHandle;
+
 
 /**
  * Created by Andy Zhang(zhangyong232@gmail.com) on 2015/3/6.

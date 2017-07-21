@@ -29,7 +29,8 @@ import android.net.Uri.Builder;
 import android.text.TextUtils;
 
 import com.chen.plugin.core.Env;
-import com.morgoo.droidplugin.hook.BaseHookHandle;
+import com.chen.plugin.hook.BaseHookHandle;
+
 
 import java.lang.reflect.Method;
 

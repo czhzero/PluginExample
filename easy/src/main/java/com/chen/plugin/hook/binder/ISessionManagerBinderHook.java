@@ -25,9 +25,10 @@ package com.chen.plugin.hook.binder;
 import android.content.Context;
 import android.os.IBinder;
 
-import com.morgoo.droidplugin.hook.BaseHookHandle;
-import com.morgoo.droidplugin.hook.handle.ISessionManagerHookHandle;
-import com.morgoo.helper.compat.ISessionManagerCompat;
+import com.chen.plugin.helper.compat.ISessionManagerCompat;
+import com.chen.plugin.hook.BaseHookHandle;
+import com.chen.plugin.hook.handle.ISessionManagerHookHandle;
+
 
 /**
  * Created by Andy Zhang(zhangyong232@gmail.com) on 2015/3/9.

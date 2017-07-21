@@ -25,15 +25,15 @@ package com.chen.plugin.hook.proxy;
 import android.content.Context;
 import android.util.AndroidRuntimeException;
 
-import com.morgoo.droidplugin.hook.BaseHookHandle;
-import com.morgoo.droidplugin.hook.handle.IActivityManagerHookHandle;
+import com.chen.plugin.helper.MyProxy;
+import com.chen.plugin.helper.compat.ActivityManagerNativeCompat;
+import com.chen.plugin.helper.compat.IActivityManagerCompat;
+import com.chen.plugin.helper.compat.SingletonCompat;
+import com.chen.plugin.hook.BaseHookHandle;
+import com.chen.plugin.hook.handle.IActivityManagerHookHandle;
 import com.chen.plugin.reflect.FieldUtils;
-import com.morgoo.droidplugin.reflect.Utils;
 import com.chen.plugin.helper.Log;
-import com.morgoo.helper.MyProxy;
-import com.morgoo.helper.compat.ActivityManagerNativeCompat;
-import com.morgoo.helper.compat.IActivityManagerCompat;
-import com.morgoo.helper.compat.SingletonCompat;
+import com.chen.plugin.reflect.Utils;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -101,16 +101,17 @@ public class IActivityManagerHook extends ProxyHook {
             //这里先写一次，防止后面找不到Singleton类导致的挂钩子失败的问题。
             FieldUtils.writeField(obj, "mInstance", object);
 
-            //这里使用方式1，如果成功的话，会导致上面的写操作被覆盖。
-            FieldUtils.writeStaticField(cls, "gDefault", new android.util.Singleton<Object>() {
-                @Override
-                protected Object create() {
-                    Log.e(TAG, "Install ActivityManager 3 Hook  old=%s,new=%s", mOldObj, object);
-                    return object;
-                }
-            });
+//            //这里使用方式1，如果成功的话，会导致上面的写操作被覆盖。
+//            FieldUtils.writeStaticField(cls, "gDefault", new android.util.Singleton<Object>() {
+//                @Override
+//                protected Object create() {
+//                    Log.e(TAG, "Install ActivityManager 3 Hook  old=%s,new=%s", mOldObj, object);
+//                    return object;
+//                }
+//            });
 
             Log.i(TAG, "Install ActivityManager Hook 2 old=%s,new=%s", mOldObj.toString(), object);
+
             Object iam2 = ActivityManagerNativeCompat.getDefault();
             // 方式2
             if (iam1 == iam2) {

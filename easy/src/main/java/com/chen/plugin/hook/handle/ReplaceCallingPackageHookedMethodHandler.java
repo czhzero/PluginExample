@@ -4,7 +4,8 @@ import android.content.Context;
 import android.os.Build;
 import android.os.RemoteException;
 
-import com.morgoo.droidplugin.hook.HookedMethodHandler;
+
+import com.chen.plugin.hook.HookedMethodHandler;
 import com.chen.plugin.pm.PluginManager;
 
 import java.lang.reflect.Method;

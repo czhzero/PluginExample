@@ -26,9 +26,10 @@ import android.content.Context;
 import android.os.Environment;
 import android.text.TextUtils;
 
-import com.morgoo.droidplugin.core.PluginDirHelper;
-import com.morgoo.droidplugin.hook.BaseHookHandle;
-import com.morgoo.droidplugin.hook.HookedMethodHandler;
+
+import com.chen.plugin.core.PluginDirHelper;
+import com.chen.plugin.hook.BaseHookHandle;
+import com.chen.plugin.hook.HookedMethodHandler;
 
 import java.io.File;
 import java.lang.reflect.Method;

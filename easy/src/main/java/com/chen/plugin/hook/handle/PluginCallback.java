@@ -35,11 +35,13 @@ import android.os.Message;
 
 import com.chen.plugin.core.Env;
 import com.chen.plugin.core.PluginProcessManager;
-import com.morgoo.droidplugin.hook.proxy.IPackageManagerHook;
+
+import com.chen.plugin.hook.proxy.IPackageManagerHook;
 import com.chen.plugin.pm.PluginManager;
 import com.chen.plugin.reflect.FieldUtils;
-import com.morgoo.droidplugin.stub.ShortcutProxyActivity;
+
 import com.chen.plugin.helper.Log;
+import com.chen.plugin.stub.ShortcutProxyActivity;
 
 
 public class PluginCallback implements Handler.Callback {
