@@ -57,7 +57,7 @@ public class MyProxy {
 
 //bugfix,这个问题我也不知道为什么出现，先这么处理吧。
 //        java.lang.RuntimeException: Socket closed
-//        at com.morgoo.droidplugin.c.c.i.invoke(Unknown Source)
+//        at com.chen.plugin.c.c.i.invoke(Unknown Source)
 //        at $Proxy9.accept(Native Method)
 //        at java.net.PlainSocketImpl.accept(PlainSocketImpl.java:98)
 //        at java.net.ServerSocket.implAccept(ServerSocket.java:202)

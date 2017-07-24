@@ -144,15 +144,15 @@ public class IWifiManagerHookHandle extends BaseHookHandle {
 //        at android.net.wifi.IWifiManager$Stub$Proxy.setWifiEnabled(IWifiManager.java:809)
 //        at java.lang.reflect.Method.invokeNative(Native Method)
 //        at java.lang.reflect.Method.invoke(Method.java:515)
-//        at com.morgoo.droidplugin.c.a.a.invoke(Unknown Source)
-//        at com.morgoo.droidplugin.c.a.k.invoke(Unknown Source)
+//        at com.chen.plugin.c.a.a.invoke(Unknown Source)
+//        at com.chen.plugin.c.a.k.invoke(Unknown Source)
 //        at $Proxy8.setWifiEnabled(Native Method)
 //        at android.net.wifi.WifiManager.setWifiEnabled(WifiManager.java:1028)
 //        at com.qihoo.a.m.b(Unknown Source)
 //        at com.qihoo.appstore.sharenearby.NBReceiverActivity.onCreate(Unknown Source)
 //        at android.app.Activity.performCreate(Activity.java:5231)
 //        at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1087)
-//        at com.morgoo.droidplugin.c.b.hq.callActivityOnCreate(Unknown Source)
+//        at com.chen.plugin.c.b.hq.callActivityOnCreate(Unknown Source)
 //        at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2172)
 //                ... 11 more
 //        ============================

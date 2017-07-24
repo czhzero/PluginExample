@@ -7,6 +7,26 @@
 
 
     <TextView
+        android:id="@+id/tv_entrance_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:padding="10dp"
+        android:text="初始化service"
+        android:textSize="16dp" />
+
+
+    <TextView
+        android:id="@+id/tv_entrance_4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:padding="10dp"
+        android:text="安装插件"
+        android:textSize="16dp" />
+
+
+    <TextView
         android:id="@+id/tv_entrance_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

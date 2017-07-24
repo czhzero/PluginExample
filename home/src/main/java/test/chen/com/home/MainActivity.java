@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.view.View;
 
 import com.chen.plugin.PluginHelper;
+import com.chen.plugin.pm.PluginManager;
 
 
 /**
@@ -21,7 +23,6 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        PluginHelper.getInstance().initPlugin(this);
 
         findViewById(R.id.tv_entrance_1).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,6 +41,26 @@ public class MainActivity extends Activity {
                 startActivity(intent);
             }
         });
+
+        findViewById(R.id.tv_entrance_3).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PluginHelper.getInstance().initPlugin(MainActivity.this);
+            }
+        });
+
+        findViewById(R.id.tv_entrance_4).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    PluginManager.getInstance().installPackage("/sdcard/test1.apk", 0);
+                    PluginManager.getInstance().installPackage("/sdcard/test2.apk", 0);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
 
     }
 
