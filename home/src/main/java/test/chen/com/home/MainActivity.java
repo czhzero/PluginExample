@@ -65,18 +65,5 @@ public class MainActivity extends Activity {
     }
 
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(newBase);
-
-//        try {
-//            FrameworkHookHelper.hookActivityManagerNative();
-//            FrameworkHookHelper.hookActivityThreadHandler();
-//            FrameworkHookHelper.hookPackageManager();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-    }
-
 
 }
