@@ -53,8 +53,11 @@ import java.util.TreeSet;
  */
 class RunningProcesList {
 
-    private static final Collator sCollator = Collator.getInstance();
     private static final String TAG = RunningProcesList.class.getSimpleName();
+
+    private static final Collator sCollator = Collator.getInstance();
+
+
     private static Comparator sComponentInfoComparator = new Comparator<ComponentInfo>() {
         @Override
         public int compare(ComponentInfo lhs, ComponentInfo rhs) {

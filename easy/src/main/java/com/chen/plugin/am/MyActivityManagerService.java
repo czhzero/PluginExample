@@ -59,6 +59,7 @@ import java.util.List;
 public class MyActivityManagerService extends BaseActivityManagerService {
 
     private static final String TAG = MyActivityManagerService.class.getSimpleName();
+
     private StaticProcessList mStaticProcessList = new StaticProcessList();
     private RunningProcesList mRunningProcessList = new RunningProcesList();
 

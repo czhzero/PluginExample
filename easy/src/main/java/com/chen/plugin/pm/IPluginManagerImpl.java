@@ -143,17 +143,20 @@ public class IPluginManagerImpl extends IPluginManagerService.Stub {
 
 
     private void loadAllPlugin(Context context) {
+
         long b = System.currentTimeMillis();
-        ArrayList<File> apkfiles = null;
+
+        ArrayList<File> pluginApkFiles = null;
+
         try {
-            apkfiles = new ArrayList<File>();
+            pluginApkFiles = new ArrayList<>();
             File baseDir = new File(PluginDirHelper.getBaseDir(context));
             File[] dirs = baseDir.listFiles();
             for (File dir : dirs) {
                 if (dir.isDirectory()) {
                     File file = new File(dir, "apk/base-1.apk");
                     if (file.exists()) {
-                        apkfiles.add(file);
+                        pluginApkFiles.add(file);
                     }
                 }
             }
@@ -162,14 +165,17 @@ public class IPluginManagerImpl extends IPluginManagerService.Stub {
         }
 
         Log.i(TAG, "Search apk cost %s ms", (System.currentTimeMillis() - b));
+
         b = System.currentTimeMillis();
 
-        if (apkfiles != null && apkfiles.size() > 0) {
-            for (File pluginFile : apkfiles) {
+        if (pluginApkFiles != null && pluginApkFiles.size() > 0) {
+            for (File pluginFile : pluginApkFiles) {
                 long b1 = System.currentTimeMillis();
                 try {
                     PluginPackageParser pluginPackageParser = new PluginPackageParser(mContext, pluginFile);
+
                     Signature[] signatures = readSignatures(pluginPackageParser.getPackageName());
+
                     if (signatures == null || signatures.length <= 0) {
                         pluginPackageParser.collectCertificates(0);
                         PackageInfo info = pluginPackageParser.getPackageInfo(PackageManager.GET_SIGNATURES);
@@ -190,6 +196,7 @@ public class IPluginManagerImpl extends IPluginManagerService.Stub {
         }
 
         Log.i(TAG, "Parse all apk cost %s ms", (System.currentTimeMillis() - b));
+
         b = System.currentTimeMillis();
 
         try {

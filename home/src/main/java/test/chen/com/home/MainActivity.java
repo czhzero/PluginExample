@@ -8,6 +8,7 @@ import android.os.RemoteException;
 import android.view.View;
 
 import com.chen.plugin.PluginHelper;
+import com.chen.plugin.am.MyActivityManagerService;
 import com.chen.plugin.pm.PluginManager;
 
 
@@ -45,7 +46,13 @@ public class MainActivity extends Activity {
         findViewById(R.id.tv_entrance_3).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PluginHelper.getInstance().initPlugin(MainActivity.this);
+//                PluginHelper.getInstance().initPlugin(MainActivity.this);
+                MyActivityManagerService d = new MyActivityManagerService(MainActivity.this);
+                try {
+                    d.onCreate(null);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 

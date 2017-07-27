@@ -77,6 +77,13 @@ public class PluginProcessManager {
     private static Map<String, ClassLoader> sPluginClassLoaderCache = new WeakHashMap<String, ClassLoader>(1);
     private static Map<String, Object> sPluginLoadedApkCache = new WeakHashMap<String, Object>(1);
 
+    private static List<String> sProcessList = new ArrayList<>();
+
+    /**
+     *  通过context, ActivityManager的getRunningAppProcesses方法获取当前运行进程名称
+     * @param context
+     * @return
+     */
     public static String getCurrentProcessName(Context context) {
         if (context == null)
             return sCurrentProcessName;
@@ -99,9 +106,11 @@ public class PluginProcessManager {
         return sCurrentProcessName;
     }
 
-    private static List<String> sProcessList = new ArrayList<>();
 
-
+    /**
+     * 通过context获取Activity,Receiver,Provider,Service,获取所有进程信息
+     * @param context
+     */
     private static void initProcessList(Context context) {
         try {
             if (sProcessList.size() > 0) {
@@ -145,6 +154,7 @@ public class PluginProcessManager {
                 }
             }
         } catch (PackageManager.NameNotFoundException e) {
+            Log.d(TAG, "PackageManager getProcess %s", e);
         }
     }
 
@@ -156,6 +166,7 @@ public class PluginProcessManager {
         initProcessList(context);
         return !sProcessList.contains(currentProcessName);
     }
+
 
     public static ClassLoader getPluginClassLoader(String pkg) throws IllegalAccessException, NoSuchMethodException, ClassNotFoundException, InvocationTargetException {
         ClassLoader classLoader = sPluginClassLoaderCache.get(pkg);
@@ -194,7 +205,7 @@ public class PluginProcessManager {
                     }
                     sPluginLoadedApkCache.put(pluginInfo.packageName, loadedApk);
 
-                /*添加ClassLoader LoadedApk.mClassLoader*/
+                    /*添加ClassLoader LoadedApk.mClassLoader*/
 
                     String optimizedDirectory = PluginDirHelper.getPluginDalvikCacheDir(hostContext, pluginInfo.packageName);
                     String libraryPath = PluginDirHelper.getPluginNativeLibraryDir(hostContext, pluginInfo.packageName);

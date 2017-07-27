@@ -37,4 +37,6 @@ public class Env {
     public static final String EXTRA_TYPE = "com.chen.plugin.EXTRA_TYPE";
     public static final String EXTRA_ACTION = "com.chen.plugin.EXTRA_ACTION";
 
+    public static final String CATEGORY_ACTIVITY_PROXY_STUB = "com.chen.plugin.category.PROXY_STUB";
+
 }

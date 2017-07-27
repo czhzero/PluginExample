@@ -1,25 +1,3 @@
-/*
-**        DroidPlugin Project
-**
-** Copyright(c) 2015 Andy Zhang <zhangyong232@gmail.com>
-**
-** This file is part of DroidPlugin.
-**
-** DroidPlugin is free software: you can redistribute it and/or
-** modify it under the terms of the GNU Lesser General Public
-** License as published by the Free Software Foundation, either
-** version 3 of the License, or (at your option) any later version.
-**
-** DroidPlugin is distributed in the hope that it will be useful,
-** but WITHOUT ANY WARRANTY; without even the implied warranty of
-** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Lesser General Public License for more details.
-**
-** You should have received a copy of the GNU Lesser General Public
-** License along with DroidPlugin.  If not, see <http://www.gnu.org/licenses/lgpl.txt>
-**
-**/
-
 package com.chen.plugin.am;
 
 import android.content.Context;
@@ -35,6 +13,7 @@ import android.content.pm.ServiceInfo;
 import android.text.TextUtils;
 
 
+import com.chen.plugin.core.Env;
 import com.chen.plugin.stub.ActivityStub;
 import com.chen.plugin.stub.ContentProviderStub;
 
@@ -48,34 +27,36 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by Andy Zhang(zhangyong232@gmail.com) on 2015/3/10.
+ * Created by chenzhaohua on 17-7-21.
+ * 预先注册(占坑)进程信息管理
  */
 class StaticProcessList {
 
-    private static final String CATEGORY_ACTIVITY_PROXY_STUB = "com.chen.plugin.category.PROXY_STUB";
+    /**
+     * 根据CATEGORY_ACTIVITY_PROXY_STUB筛选的进程信息
+     * 预先占坑的进程信息,包括ActivityInfo,ServiceInfo,ProviderInfo
+     */
+    private Map<String, ProcessItem> items = new HashMap<>(10);
 
-
-    //key=processName value=ProcessItem
-    private Map<String, ProcessItem> items = new HashMap<String, ProcessItem>(10);
-
+    /**
+     * 非CATEGORY_ACTIVITY_PROXY_STUB的其他额外进程
+     */
     private List<String> mOtherProcessNames = new ArrayList<>();
 
 
     /**
-     * 我们预注册的进程item
-     * <p/>
-     * Created by Andy Zhang(zhangyong232@gmail.com) on 2015/3/10.
+     * 预先注册的进程Item
      */
     private class ProcessItem {
 
         private String name;
 
         //key=ActivityInfo.name,value=ActivityInfo
-        private Map<String, ActivityInfo> activityInfos = new HashMap<String, ActivityInfo>(4);
+        private Map<String, ActivityInfo> activityInfos = new HashMap<>(4);
         //key=ServiceInfo.name,value=ServiceInfo
-        private Map<String, ServiceInfo> serviceInfos = new HashMap<String, ServiceInfo>(1);
+        private Map<String, ServiceInfo> serviceInfos = new HashMap<>(1);
         //key=ProviderInfo.authority,value=ProviderInfo
-        private Map<String, ProviderInfo> providerInfos = new HashMap<String, ProviderInfo>(1);
+        private Map<String, ProviderInfo> providerInfos = new HashMap<>(1);
 
         private void addActivityInfo(ActivityInfo info) {
             if (!activityInfos.containsKey(info.name)) {
@@ -99,13 +80,14 @@ class StaticProcessList {
     }
 
 
-    void onCreate(Context mHostContext) throws NameNotFoundException {
+    void onCreate(Context hostContext) throws NameNotFoundException {
+
         Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.addCategory(CATEGORY_ACTIVITY_PROXY_STUB);
-        intent.setPackage(mHostContext.getPackageName());
+        intent.addCategory(Env.CATEGORY_ACTIVITY_PROXY_STUB);
+        intent.setPackage(hostContext.getPackageName());
 
 
-        PackageManager pm = mHostContext.getPackageManager();
+        PackageManager pm = hostContext.getPackageManager();
         List<ResolveInfo> activities = pm.queryIntentActivities(intent, PackageManager.GET_META_DATA);
         for (ResolveInfo activity : activities) {
             addActivityInfo(activity.activityInfo);
@@ -116,7 +98,8 @@ class StaticProcessList {
             addServiceInfo(service.serviceInfo);
         }
 
-        PackageInfo packageInfo = pm.getPackageInfo(mHostContext.getPackageName(), PackageManager.GET_PROVIDERS);
+        PackageInfo packageInfo = pm.getPackageInfo(hostContext.getPackageName(), PackageManager.GET_PROVIDERS);
+
         if (packageInfo.providers != null && packageInfo.providers.length > 0) {
             for (ProviderInfo providerInfo : packageInfo.providers) {
                 if (providerInfo.name != null && providerInfo.name.startsWith(ContentProviderStub.class.getName())) {
@@ -126,7 +109,8 @@ class StaticProcessList {
         }
 
         mOtherProcessNames.clear();
-        PackageInfo packageInfo1 = pm.getPackageInfo(mHostContext.getPackageName(), PackageManager.GET_ACTIVITIES
+
+        PackageInfo packageInfo1 = pm.getPackageInfo(hostContext.getPackageName(), PackageManager.GET_ACTIVITIES
                 | PackageManager.GET_RECEIVERS
                 | PackageManager.GET_PROVIDERS
                 | PackageManager.GET_SERVICES);
@@ -161,6 +145,7 @@ class StaticProcessList {
                 }
             }
         }
+
     }
 
     public List<String> getOtherProcessNames() {

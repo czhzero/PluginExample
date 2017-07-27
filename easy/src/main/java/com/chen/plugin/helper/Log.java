@@ -63,8 +63,8 @@ public class Log {
     private static final File sDir = new File(Environment.getExternalStorageDirectory(), "360Log/Plugin/");
 
     static {
-        sFileLog = sDir.exists() && sDir.isDirectory();
-        sDebug = sFileLog;
+//        sFileLog = sDir.exists() && sDir.isDirectory();
+//        sDebug = sFileLog;
     }
 
     public static boolean isDebug() {
